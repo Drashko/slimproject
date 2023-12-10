@@ -1,0 +1,15 @@
+@import "../vendors/choices/choices.min.css";
+@import "../vendors/dhtmlx-gantt/dhtmlxgantt.css";
+@import "../vendors/dropzone/dropzone.min.css";
+@import "../vendors/flatpickr/flatpickr.min.css";
+@import "../vendors/frappe-gantt/frappe-gantt.min.css";
+@import "../vendors/fullcalendar/main.min.css";
+@import "../vendors/glightbox/glightbox.min.css";
+@import "../vendors/leaflet/leaflet.css";
+@import "../vendors/leaflet.markercluster/MarkerCluster.css";
+@import "../vendors/leaflet.markercluster/MarkerCluster.Default.css";
+@import "../vendors/overlayscrollbars/OverlayScrollbars.min.css";
+@import "../vendors/plyr/plyr.css";
+@import "../vendors/prism/prism-okaidia.css";
+@import "../vendors/simplebar/simplebar.min.css";
+@import "../vendors/swiper/swiper-bundle.min.css";

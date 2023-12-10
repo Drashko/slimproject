@@ -1,0 +1,9 @@
+vendor/
+.idea/
+.envco
+
+.env
+public/.env
+
+env.php
+config/env.php

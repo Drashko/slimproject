@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title>Phoenix</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('build/img/favicons/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('build/img/favicons/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('build/img/favicons/favicon-16x16.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('build/img/favicons/favicon.icon')}}">
+    <link rel="manifest" href="{{ asset('build/manifest.json') }}">
+    <meta name="msapplication-TileImage" content="{{ asset('build/img/favicons/mstile-150x150.png') }}">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('main') }}
+        {{ encore_entry_link_tags('vendor') }}
+    {% endblock %}
+
+</head>
+<body>
+{% for name, messages in flash.getMessages() %}
+    <!--div class="alert alert-{{ name }} alert-dismissible fade show" role="alert">
+        {% for message in messages %}
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        {% endfor %}
+    </div-->
+{% endfor %}
+<!-- ... -->
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+        {% block sidebar %}
+            {{  include('admin/partials/sidebar.twig') }}
+        {% endblock %}
+        {% block header %}
+            {{  include('admin/partials/header.twig') }}
+        {% endblock %}
+
+        {% block content %}{% endblock %}
+
+    </main>
+    {% block javascripts %}
+        {{ encore_entry_script_tags('main') }}
+        {{ encore_entry_script_tags('vendor') }}
+    {% endblock %}
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+</body>
+</html>
