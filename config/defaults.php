@@ -1,6 +1,7 @@
 <?php
 // Should be set to 0 in production
 
+
 error_reporting(E_ALL);
 
 // Should be set to '0' in production
@@ -74,12 +75,12 @@ $settings['doctrine']  = [
         'dbname' => 'slim',
         'user' => 'root',
         'password' => '',
-        'charset' => 'utf-8'
+        'charset' => 'utf8'
     ]
 ];
 //add commands here
 $settings['commands'] = [
-    \App\Console\ExampleCommand::class,
+    App\Command\ExampleCommand::class,
     // Add more here...
 ];
 

@@ -1,5 +1,6 @@
 <?php
 
+use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
@@ -20,6 +21,8 @@ use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookup;
@@ -172,9 +175,9 @@ return [
     //add doctrine
     EntityManager::class => function (ContainerInterface $container){
         $settings = $container->get('settings');
-//        $cache = $settings['doctrine']['dev_mode'] ?
-//            DoctrineProvider::wrap(new ArrayAdapter()) :
-//            DoctrineProvider::wrap(new FilesystemAdapter(directory: $settings['doctrine']['cache_dir']));
+        $cache = $settings['doctrine']['dev_mode'] ?
+            DoctrineProvider::wrap(new ArrayAdapter()) :
+            DoctrineProvider::wrap(new FilesystemAdapter(directory: $settings['doctrine']['cache_dir']));
 
         $config = ORMSetup::createAttributeMetadataConfiguration(
             $settings['doctrine']['metadata_dirs'],
