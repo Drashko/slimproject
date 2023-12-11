@@ -7,3 +7,8 @@ public/.env
 
 env.php
 config/env.php
+
+.log
+**/logs
+
+backup/__package.json

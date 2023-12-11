@@ -25,27 +25,27 @@
                 <hr class="bg-200" />
                 <div class="divider-content-center">or use email</div>
             </div>
-            <form>
+            <form  method="post" action="/signup">
                 <div class="mb-3 text-start">
                     <label class="form-label" for="name">Name</label>
-                    <input class="form-control" id="name" type="text" placeholder="Name" />
+                    <input class="form-control" id="name" type="text" name="name" placeholder="Name" />
                 </div>
                 <div class="mb-3 text-start">
                     <label class="form-label" for="email">Email address</label>
-                    <input class="form-control" id="email" type="email" placeholder="name@example.com" />
+                    <input class="form-control" id="email" type="email" name="email" placeholder="name@example.com" />
                 </div>
                 <div class="row g-3 mb-3">
                     <div class="col-sm-6">
                         <label class="form-label" for="password">Password</label>
-                        <input class="form-control form-icon-input" id="password" type="password" placeholder="Password" />
+                        <input class="form-control form-icon-input" id="password" type="password" name="password" placeholder="Password" />
                     </div>
                     <div class="col-sm-6">
                         <label class="form-label" for="confirmPassword">Confirm Password</label>
-                        <input class="form-control form-icon-input" id="confirmPassword" type="password" placeholder="Confirm Password" />
+                        <input class="form-control form-icon-input" id="confirmPassword" type="password" name="confirm_password" placeholder="Confirm Password" />
                     </div>
                 </div>
                 <div class="form-check mb-3">
-                    <input class="form-check-input" id="termsService" type="checkbox" />
+                    <input class="form-check-input" id="termsService" type="checkbox" name="terms_service"/>
                     <label class="form-label fs--1 text-none" for="termsService">I accept the <a href="#!">terms </a>and <a href="#!">privacy policy</a></label>
                 </div>
                 <button class="btn btn-primary w-100 mb-3">Sign up</button>

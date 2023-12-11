@@ -1,7 +1,10 @@
 <?php
 
+use App\Domain\Service\Doctrine\EntityManagerServiceInterface;
+use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
 use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
@@ -20,6 +23,8 @@ use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookup;
@@ -170,11 +175,11 @@ return [
     },
 
     //add doctrine
-    EntityManager::class => function (ContainerInterface $container){
+    EntityManagerInterface::class => function (ContainerInterface $container){
         $settings = $container->get('settings');
-//        $cache = $settings['doctrine']['dev_mode'] ?
-//            DoctrineProvider::wrap(new ArrayAdapter()) :
-//            DoctrineProvider::wrap(new FilesystemAdapter(directory: $settings['doctrine']['cache_dir']));
+        $cache = $settings['doctrine']['dev_mode'] ?
+            DoctrineProvider::wrap(new ArrayAdapter()) :
+            DoctrineProvider::wrap(new FilesystemAdapter(directory: $settings['doctrine']['cache_dir']));
 
         $config = ORMSetup::createAttributeMetadataConfiguration(
             $settings['doctrine']['metadata_dirs'],
@@ -197,4 +202,9 @@ return [
     ResponseFactoryInterface::class => function (ContainerInterface $container) {
         return $container->get(Psr17Factory::class);
     },
+
+    EntityManagerServiceInterface::class => function(ContainerInterface $container){
+        $entityManager = $container->get(EntityManagerInterface::class);
+        return new \App\Domain\Service\Doctrine\EntityManagerService($entityManager);
+    }
 ];
