@@ -200,7 +200,7 @@
     const getCharMapAppend = option('charmap_append');
 
     const isArray = global.isArray;
-    const UserDefined = 'User Defined';
+    const UserDefined = 'UserEntity Defined';
     const getDefaultCharMap = () => {
       return [
         {

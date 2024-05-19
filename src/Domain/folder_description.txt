@@ -1,0 +1,7 @@
+The domain layer contains:
+
+• Entities
+• Value objects
+• Domain events
+• Entity (write model) repository interfaces
+• Domain services
