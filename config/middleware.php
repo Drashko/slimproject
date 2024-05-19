@@ -1,10 +1,10 @@
 <?php
 
-use App\Factory\LoggerFactory;
-use App\Middleware\FlashMessagesMiddleware;
+use App\Infrastructure\Slim\Factory\LoggerFactory;
+use App\Infrastructure\Slim\Middleware\FlashMessagesMiddleware;
 use Odan\Session\Middleware\SessionStartMiddleware;
-use Slim\Middleware\ErrorMiddleware;
 use Slim\App;
+use Slim\Middleware\ErrorMiddleware;
 use Slim\Views\TwigMiddleware;
 
 return function (App $app) {

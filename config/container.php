@@ -1,11 +1,19 @@
 <?php
 
-use App\Domain\Service\Doctrine\EntityManagerServiceInterface;
+use App\Application\ApplicationInterface;
+use App\Application\UserServiceInterface;
+use App\Infrastructure\ORM\EntityManagerServiceInterface;
+use App\Infrastructure\Repository\UserRepository;
+use App\Infrastructure\Slim\Factory\LoggerFactory;
+use App\Infrastructure\Slim\Handler\NotFoundHandler;
+use App\Infrastructure\Support\Config;
 use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\ORMSetup;
+use Fullpipe\TwigWebpackExtension\WebpackExtension;
 use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
 use Odan\Session\SessionManagerInterface;
@@ -30,6 +38,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookup;
 use Symfony\WebpackEncoreBundle\Asset\TagRenderer;
 use Symfony\WebpackEncoreBundle\Twig\EntryFilesTwigExtension;
+use Twig\Extension\DebugExtension;
 use Twig\Extra\Intl\IntlExtension;
 
 return [
@@ -37,8 +46,8 @@ return [
     'settings' => function () {
         return require __DIR__ . '/settings.php';
     },
-    \App\Support\Config::class => function (ContainerInterface $container) {
-        return new \App\Support\Config($container->get('settings'));
+    Config::class => function (ContainerInterface $container) {
+        return new Config($container->get('settings'));
     },
     //add session manager
     SessionManagerInterface::class => function (ContainerInterface $container) {
@@ -51,8 +60,8 @@ return [
         return new PhpSession($options);
     },
     //add logger
-    \App\Factory\LoggerFactory::class => function (ContainerInterface $container) {
-        return new \App\Factory\LoggerFactory($container->get('settings')['logger']);
+    LoggerFactory::class => function (ContainerInterface $container) {
+        return new LoggerFactory($container->get('settings')['logger']);
     },
     //add error handler
     ErrorMiddleware::class => function (ContainerInterface $container) {
@@ -60,11 +69,11 @@ return [
         $settings = $container->get('settings')['error'];
         $logger = null;
         if (isset($settings['log_file'])) {
-            $logger = $container->get(\App\Factory\LoggerFactory::class)
+            $logger = $container->get(LoggerFactory::class)
                 ->addFileHandler($settings['log_file'])
                 ->createLogger();
         }
-        $errorMiddleware =  new ErrorMiddleware(
+        $errorMiddleware = new ErrorMiddleware(
             $app->getCallableResolver(),
             $app->getResponseFactory(),
             (bool)$settings['display_error_details'],
@@ -73,7 +82,7 @@ return [
             $logger
         );
         // Set the Not Found Handler
-        $errorMiddleware->setErrorHandler(HttpNotFoundException::class, \App\Handler\NotFoundHandler::class);
+        $errorMiddleware->setErrorHandler(HttpNotFoundException::class, NotFoundHandler::class);
 
         return $errorMiddleware;
     },
@@ -95,14 +104,14 @@ return [
         $environment->addGlobal('flash', $container->get(Messages::class));
 
         // Add extensions
-        $twig->addExtension(new \Fullpipe\TwigWebpackExtension\WebpackExtension(
+        $twig->addExtension(new WebpackExtension(
         // The manifest file.
             $publicPath . '/build/manifest.json',
             // The public path
             $publicPath
         ));
 
-        $twig->addExtension( new \Twig\Extension\DebugExtension());
+        $twig->addExtension(new DebugExtension());
         $twig->addExtension(new IntlExtension());
         $twig->addExtension(new EntryFilesTwigExtension($container));
         $twig->addExtension(new AssetExtension($container->get('webpack_encore.packages')));
@@ -127,7 +136,7 @@ return [
     'webpack_encore.packages' => fn(ContainerInterface $container) => new Packages(
         new Package(new JsonManifestVersionStrategy($container->get('settings')['public'] . '/build' . '/manifest.json'))
     ),
-    'webpack_encore.tag_renderer'  => fn(ContainerInterface $container) => new TagRenderer(
+    'webpack_encore.tag_renderer' => fn(ContainerInterface $container) => new TagRenderer(
         new EntrypointLookup($container->get('settings')['public'] . '/build' . '/entrypoints.json'),
         $container->get('webpack_encore.packages')
     ),
@@ -175,7 +184,7 @@ return [
     },
 
     //add doctrine
-    EntityManagerInterface::class => function (ContainerInterface $container){
+    EntityManagerInterface::class => function (ContainerInterface $container) {
         $settings = $container->get('settings');
         $cache = $settings['doctrine']['dev_mode'] ?
             DoctrineProvider::wrap(new ArrayAdapter()) :
@@ -186,9 +195,9 @@ return [
             $settings['doctrine']['dev_mode']
         );
 
-        $connection = DriverManager::getConnection($settings['doctrine']['connection'] , $config);
+        $connection = DriverManager::getConnection($settings['doctrine']['connection'], $config);
 
-        return new EntityManager($connection , $config);
+        return new EntityManager($connection, $config);
 
     },
 
@@ -203,8 +212,30 @@ return [
         return $container->get(Psr17Factory::class);
     },
 
-    EntityManagerServiceInterface::class => function(ContainerInterface $container){
+    EntityManagerServiceInterface::class => function (ContainerInterface $container) {
         $entityManager = $container->get(EntityManagerInterface::class);
-        return new \App\Domain\Service\Doctrine\EntityManagerService($entityManager);
+        return new \App\Infrastructure\ORM\EntityManagerAdapterService($entityManager);
+    },
+
+    ApplicationInterface::class => function (ContainerInterface $container) {
+        return new \App\Infrastructure\Service\Application(
+            $container->get(LoggerFactory::class),
+            $container->get(SessionInterface::class),
+            $container->get(Twig::class),
+            $container->get(Messages::class),
+            $container->get(Config::class)
+        );
+    },
+
+    \App\Domain\User\UserRepositoryInterface::class => function (ContainerInterface $container) {
+        return new UserRepository($container->get(EntityManagerServiceInterface::class));
+    },
+
+    UserServiceInterface::class => function (ContainerInterface $container) {
+        return new \App\Infrastructure\Service\UserService(
+            $container->get(\App\Domain\User\UserRepositoryInterface::class),
+            $container->get(EntityManagerServiceInterface::class),
+
+        );
     }
 ];

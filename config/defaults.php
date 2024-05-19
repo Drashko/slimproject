@@ -80,7 +80,7 @@ $settings['doctrine']  = [
 ];
 //add commands here
 $settings['commands'] = [
-    App\Command\ExampleCommand::class,
+    \App\Infrastructure\Slim\Command\ExampleCommand::class,
     // Add more here...
 ];
 

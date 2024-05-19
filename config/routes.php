@@ -1,7 +1,5 @@
 <?php
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
@@ -12,7 +10,7 @@ return function (App $app) {
 //        return $response;
 //    });
 
-//    $app->get('/', [\App\Action\Front\IndexAction::class, 'index']);
+//    $app->get('/', [\App\Controller\Front\IndexController::class, 'index']);
 //
 //    $app->get('/about', function (ServerRequestInterface $request, ResponseInterface $response) {
 //        $response->getBody()->write('Hello, World!');
@@ -21,25 +19,21 @@ return function (App $app) {
 
     //admin
     $app->group('', function () use ($app) {
-        $app->get('/admin', [\App\Action\Admin\IndexAction::class, 'index']);
-        $app->get('/admin/users', [\App\Action\Admin\UserAction::class, 'index']);
-        $app->get('/admin/settings', [\App\Action\Admin\SettingsAction::class, 'index']);
+        $app->get('/admin', [\App\Infrastructure\Slim\Controller\Admin\IndexController::class, 'index']);
+        $app->get('/admin/users', [\App\Infrastructure\Slim\Controller\Admin\UserController::class, 'index']);
+        $app->get('/admin/settings', [\App\Infrastructure\Slim\Controller\Admin\SettingsController::class, 'index']);
+        $app->get('/admin/test', [\App\Application\Controller\Admin\TestController::class, 'index']);
     });
-    //frontend end
-//    $app->group('', function() use ($app){
-//
-//    });
-
+    //front end
     $app->group('', function(RouteCollectorProxy $authentication) {
-        $authentication->get('/signin', [\App\Action\Auth\SignInAction::class, 'index']);
-        $authentication->get('/signup', [\App\Action\Auth\SignUpAction::class, 'index']);
-        $authentication->post('/signup', [\App\Action\Auth\SignUpAction::class, 'index']);
-        $authentication->get('/forgot_password', [\App\Action\Auth\ForgotPasswordAction::class, 'index']);
+        $authentication->get('/', [\App\Infrastructure\Slim\Controller\Front\IndexController::class, 'index']);
+        $authentication->get('/signin', [\App\Infrastructure\Slim\Controller\Auth\SignInController::class, 'index']);
+        $authentication->get('/signup', [\App\Infrastructure\Slim\Controller\Auth\SignUpController::class, 'index']);
+        $authentication->post('/signup', [\App\Infrastructure\Slim\Controller\Auth\SignUpController::class, 'index']);
+        $authentication->get('/forgot_password', [\App\Infrastructure\Slim\Controller\Auth\ForgotPasswordController::class, 'index']);
     });
 
-
-
-
+    
     // $app->group('/categories', function (RouteCollectorProxy $categories) {
     //        $categories->get('', [CategoryController::class, 'index']);
     //        $categories->get('/load', [CategoryController::class, 'load']);

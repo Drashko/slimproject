@@ -1882,7 +1882,7 @@ var reportsDetailsChartInit = function reportsDetailsChartInit() {
         // },
         xAxis: {
           type: 'category',
-          data: ['Analysis', 'Statement', 'Action', 'Offering', 'Interlocution'],
+          data: ['Analysis', 'Statement', 'Controller', 'Offering', 'Interlocution'],
           axisLabel: {
             color: getColor('gray-900'),
             fontFamily: 'Nunito Sans',

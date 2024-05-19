@@ -432,7 +432,7 @@
       const tablePanel = {
         type: 'table',
         header: [
-          'Action',
+          'Controller',
           'Shortcut'
         ],
         cells: shortcutList

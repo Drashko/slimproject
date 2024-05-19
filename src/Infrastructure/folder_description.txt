@@ -1,0 +1,8 @@
+The infrastructure layer consists of:
+
+• Web controllers
+• CLI commands
+• Write and read model repository implementations
+• Services that connect to external systems, like a remote API, or the file
+system
+• Services that use the current time or generate random data
