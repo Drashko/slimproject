@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Service;
 
-use AccessCheckerInterface;
+use App\Application\AccessCheckerInterface;
 
 class AccessChecker implements AccessCheckerInterface
 {

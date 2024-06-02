@@ -12,3 +12,5 @@ config/env.php
 **/logs
 
 backup/__package.json
+
+*.log
