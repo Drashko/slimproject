@@ -48,9 +48,10 @@ $settings['twig'] = [
     // Twig environment options
     'options' => [
         'debug' => true,
-        'cache_enabled' => false, // Should be set to true in production
-        'cache_path' => __DIR__ . '/../tmp/twig',
+        'cache_enabled' => false, //todo  Should be set to true in production
+        'cache_path' => __DIR__ . '/../tmp/twig'
     ],
+    'form_theme' => 'layout/form.twig'
 ];
 $settings['doctrine']  = [
     // Enables or disables Doctrine metadata caching

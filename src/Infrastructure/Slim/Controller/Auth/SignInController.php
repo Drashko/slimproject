@@ -2,31 +2,24 @@
 
 namespace App\Infrastructure\Slim\Controller\Auth;
 
-use App\Application\Factory\LoggerFactory;
-use App\Infrastructure\Support\Config;
+use App\Application\ApplicationInterface;
+use App\Application\Dto\UserDto;
+use App\Domain\User\UserEntity;
+use App\Infrastructure\Slim\Form\UserFormType;
 use Exception;
-use Odan\Session\SessionInterface;
-use Odan\Session\SessionManagerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use Slim\Flash\Messages;
-use Slim\Views\Twig;
 
 class SignInController
 {
     private LoggerInterface $logger;
 
-    /**
-     * @param Config $config
-     * @param LoggerFactory $logger
-     * @param SessionInterface $session
-     * @param SessionManagerInterface $sessionManager
-     * @param Twig $twig
-     */
-    public function __construct(private readonly Config $config, LoggerFactory $logger, private readonly SessionInterface $session, private SessionManagerInterface $sessionManager, private readonly Twig $twig, private readonly Messages $flash) {
-
-        $this->logger = $logger->addFileHandler('home_action.log')->createLogger();
+    public function __construct(
+        private readonly ApplicationInterface $application,
+    )
+    {
+        $this->logger = $this->application->getLogger()->addFileHandler('signin_action.log')->createLogger();
     }
 
     /**
@@ -37,21 +30,35 @@ class SignInController
 
         try {
             // Log success
-            $this->logger->info(sprintf('UserEntity created: %s', 123));
+           // $this->logger->info(sprintf('UserEntity created: %s', 123));
             //$flash = $this->session->getFlash();
-            $this->flash->addMessage('success', 'Hi there!');
-            $viewData = [
-                'name' => 'World',
-                'notifications' => [
-                    'message' => 'You are good!'
-                ],
-            ];
+            //$this->application->getFlash()->addMessage('success', 'Hi there!');
+            //$userDto = UserDto::create('test', 'test', 'emaol@test.com');
 
-            $messages = $this->flash->getMessages();
+            $userEntity = UserDto::create('test', 'test', 'emaol@test.com');
 
+            $form = $this->application->getFromFactory()->create(UserFormType::class, $userEntity);
+
+            $data = $request->getParsedBody();
+
+            $form->handleRequest($data);
+
+            if ($form->isSubmitted()) {
+
+                $data = $form->getData();
+                print_r($data);
+
+
+            }
+
+            //$messages = $this->application->getFlash()->getMessages();
             //print_r($messages);
 
-            return $this->twig->render($response, 'authentication\signin.twig', $viewData);
+            return $this->application->getTwig()->render(
+                $response,
+                'authentication\signin.twig',
+                ['form' => $form->createView()]
+        );
 
         } catch (Exception $exception) {
             // Log error message

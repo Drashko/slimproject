@@ -3,7 +3,7 @@
 namespace App\Infrastructure\Slim\Controller\Admin;
 
 use App\Application\ApplicationInterface;
-use App\Application\UserServiceInterface;
+use App\Application\User\UserServiceInterface;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

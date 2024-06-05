@@ -1,7 +1,7 @@
 <?php
 
 use App\Application\ApplicationInterface;
-use App\Application\UserServiceInterface;
+use App\Application\User\UserServiceInterface;
 use App\Infrastructure\ORM\EntityManagerServiceInterface;
 use App\Infrastructure\Repository\UserRepository;
 use App\Infrastructure\Slim\Factory\LoggerFactory;
@@ -11,7 +11,6 @@ use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\ORMSetup;
 use Fullpipe\TwigWebpackExtension\WebpackExtension;
 use Odan\Session\PhpSession;
@@ -28,6 +27,9 @@ use Slim\Middleware\ErrorMiddleware;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
+use Symfony\Bridge\Twig\Extension\FormExtension;
+use Symfony\Bridge\Twig\Extension\TranslationExtension;
+use Symfony\Bridge\Twig\Form\TwigRendererEngine;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
@@ -35,11 +37,19 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Form\Extension\Csrf\CsrfExtension;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormRenderer;
+use Symfony\Component\Form\Forms;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
+use Symfony\Component\Translation\Translator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookup;
 use Symfony\WebpackEncoreBundle\Asset\TagRenderer;
 use Symfony\WebpackEncoreBundle\Twig\EntryFilesTwigExtension;
 use Twig\Extension\DebugExtension;
 use Twig\Extra\Intl\IntlExtension;
+use Twig\RuntimeLoader\FactoryRuntimeLoader;
 
 return [
     //get config files
@@ -86,6 +96,19 @@ return [
 
         return $errorMiddleware;
     },
+    //add translation
+    TranslatorInterface::class => function (){
+      return new Translator('en');
+    },
+    //add forms
+    FormFactoryInterface::class => function (): FormFactoryInterface {
+//
+        $formFactoryBuilder = Forms::createFormFactoryBuilder();
+        //todo add validation and csrf to from
+        //$formFactoryBuilder->addExtension(new ValidatorExtension($validator));
+        //$formFactoryBuilder->addExtension(new CsrfExtension(new CsrfTokenManager()));
+        return $formFactoryBuilder->getFormFactory();
+    },
     // Twig templates
     Twig::class => function (ContainerInterface $container) {
         $settings = $container->get('settings');
@@ -95,6 +118,7 @@ return [
         $options['cache'] = $options['cache_enabled'] ? $options['cache_path'] : false;
 
         $twig = Twig::create($twigSettings['paths'], $options);
+
         // The path must be absolute.
         // e.g. /var/www/example.com/public
         $publicPath = (string)$settings['public'];
@@ -103,22 +127,29 @@ return [
         $environment = $twig->getEnvironment();
         $environment->addGlobal('flash', $container->get(Messages::class));
 
-        // Add extensions
-        $twig->addExtension(new WebpackExtension(
-        // The manifest file.
-            $publicPath . '/build/manifest.json',
-            // The public path
-            $publicPath
-        ));
+        $formRenderer = new TwigRendererEngine([$twigSettings['form_theme']], $environment);
 
+
+        $environment->addRuntimeLoader(new FactoryRuntimeLoader([
+            FormRenderer::class => function () use ($formRenderer) {
+                return new FormRenderer($formRenderer);
+            },
+        ]));
+
+        // Add extensions
+        $twig->addExtension(new WebpackExtension($publicPath . '/build/manifest.json', $publicPath));
         $twig->addExtension(new DebugExtension());
         $twig->addExtension(new IntlExtension());
         $twig->addExtension(new EntryFilesTwigExtension($container));
         $twig->addExtension(new AssetExtension($container->get('webpack_encore.packages')));
+        $twig->addExtension(new FormExtension());
+        $twig->addExtension(new TranslationExtension($container->get(TranslatorInterface::class)));
 
 
         return $twig;
     },
+
+
     /**
      * The following two bindings are needed for EntryFilesTwigExtension & AssetExtension to work for Twig
      */
@@ -157,7 +188,7 @@ return [
 //    },
 
 
-    //addtwig middleware
+    //add twig middleware
     TwigMiddleware::class => function (ContainerInterface $container) {
         return TwigMiddleware::createFromContainer(
             $container->get(App::class),
@@ -169,6 +200,23 @@ return [
         $storage = [];
 
         return new Messages($storage);
+    },
+    //todo add translations
+//    Translator::class => function (Container $container): Translator
+//    {
+//        /** @noinspection MissingService */
+//        $translatorBuilder = new TranslatorBuilder(
+//            $container->get(YamlFileLoader::class),
+//            $container->get('settings')['translation']
+//        );
+//
+//        return $translatorBuilder->build();
+//    },
+    //add csrf to forms
+    CsrfExtension::class => function (ContainerInterface $container): CsrfExtension {
+        return new CsrfExtension(
+            $container->get(CsrfTokenManager::class)
+        );
     },
     //init console commands
     Application::class => function (ContainerInterface $container) {
@@ -223,7 +271,8 @@ return [
             $container->get(SessionInterface::class),
             $container->get(Twig::class),
             $container->get(Messages::class),
-            $container->get(Config::class)
+            $container->get(Config::class),
+            $container->get(FormFactoryInterface::class),
         );
     },
 
