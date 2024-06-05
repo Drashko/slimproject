@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Service;
 
-use App\Application\AuthorizationInterface;
+use App\Application\Access\AuthorizationInterface;
 
 class Authorization implements AuthorizationInterface
 {

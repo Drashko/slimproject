@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Service;
 
-use App\Application\UserServiceInterface;
+use App\Application\User\UserServiceInterface;
 use App\Domain\User\UserEntity;
 use App\Domain\User\UserRepositoryInterface;
-use App\Infrastructure\ORM\EntityManagerAdapterService;
 use App\Infrastructure\ORM\EntityManagerServiceInterface;
 use Dto\UserDto;
 

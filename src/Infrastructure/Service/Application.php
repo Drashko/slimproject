@@ -8,6 +8,7 @@ use App\Infrastructure\Support\Config;
 use Odan\Session\SessionInterface;
 use Slim\Flash\Messages;
 use Slim\Views\Twig;
+use \Symfony\Component\Form\FormFactoryInterface;
 
 class Application implements ApplicationInterface
 {
@@ -17,6 +18,7 @@ class Application implements ApplicationInterface
         private readonly Twig $twig,
         private readonly Messages $flash,
         private readonly Config $config,
+        private readonly FormFactoryInterface $formFactory,
     )
     {}
 
@@ -43,5 +45,10 @@ class Application implements ApplicationInterface
     public function getConfig(): Config
     {
         return $this->config;
+    }
+
+    public function getFromFactory(): FormFactoryInterface
+    {
+        return $this->formFactory;
     }
 }

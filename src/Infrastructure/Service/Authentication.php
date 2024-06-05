@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Service;
 
-use App\Application\AuthenticationInterface;
+use App\Application\Access\AuthenticationInterface;
 use App\Domain\User\UserEntity;
 
 class Authentication implements AuthenticationInterface

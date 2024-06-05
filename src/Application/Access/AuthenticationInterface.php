@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Application;
+namespace App\Application\Access;
 
 use App\Domain\User\UserEntity;
 

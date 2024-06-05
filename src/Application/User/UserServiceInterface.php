@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Application;
+namespace App\Application\User;
 
+use App\Application\Dto\UserDto;
 use App\Domain\User\UserEntity;
-use Dto\UserDto;
 
 interface UserServiceInterface
 {
