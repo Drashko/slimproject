@@ -24,7 +24,7 @@ return function (App $app) {
 //        $app->get('/{lang:en}/admin', [\App\Infrastructure\Slim\Controller\Admin\IndexController::class, 'index']);
         $app->get('/admin/users', [\App\Infrastructure\Slim\Controller\Admin\UserController::class, 'index']);
         $app->get('/admin/settings', [\App\Infrastructure\Slim\Controller\Admin\SettingsController::class, 'index']);
-        $app->get('/admin/test', [\App\Application\Controller\Admin\TestController::class, 'index']);
+        //$app->get('/admin/tests', [\App\Application\Controller\Admin\TestController::class, 'index']);
     });
     //front end
     $app->group('', function(RouteCollectorProxy $authentication) {

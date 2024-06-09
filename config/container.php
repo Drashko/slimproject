@@ -2,6 +2,7 @@
 
 use App\Application\ApplicationInterface;
 use App\Application\User\UserServiceInterface;
+use App\Domain\User\UserRepositoryInterface;
 use App\Infrastructure\ORM\EntityManagerServiceInterface;
 use App\Infrastructure\Repository\UserRepository;
 use App\Infrastructure\Slim\Factory\LoggerFactory;
@@ -126,29 +127,21 @@ return [
     Twig::class => function (ContainerInterface $container) {
         $settings = $container->get('settings');
         $twigSettings = $settings['twig'];
-
         $options = $twigSettings['options'];
         $options['cache'] = $options['cache_enabled'] ? $options['cache_path'] : false;
-
         $twig = Twig::create($twigSettings['paths'], $options);
-
         // The path must be absolute.
         // e.g. /var/www/example.com/public
         $publicPath = (string)$settings['public'];
-
         // Add global variables
         $environment = $twig->getEnvironment();
         $environment->addGlobal('flash', $container->get(Messages::class));
-
         $formRenderer = new TwigRendererEngine([$twigSettings['form_theme']], $environment);
-
-
         $environment->addRuntimeLoader(new FactoryRuntimeLoader([
             FormRenderer::class => function () use ($formRenderer) {
                 return new FormRenderer($formRenderer);
             },
         ]));
-
         // Add extensions
         $twig->addExtension(new WebpackExtension($publicPath . '/build/manifest.json', $publicPath));
         $twig->addExtension(new DebugExtension());
@@ -288,13 +281,13 @@ return [
         );
     },
 
-    \App\Domain\User\UserRepositoryInterface::class => function (ContainerInterface $container) {
+    UserRepositoryInterface::class => function (ContainerInterface $container) {
         return new UserRepository($container->get(EntityManagerServiceInterface::class));
     },
 
     UserServiceInterface::class => function (ContainerInterface $container) {
         return new \App\Infrastructure\Service\UserService(
-            $container->get(\App\Domain\User\UserRepositoryInterface::class),
+            $container->get(UserRepositoryInterface::class),
             $container->get(EntityManagerServiceInterface::class),
 
         );

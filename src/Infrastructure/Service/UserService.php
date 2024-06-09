@@ -7,7 +7,8 @@ use App\Application\User\UserServiceInterface;
 use App\Domain\User\UserEntity;
 use App\Domain\User\UserRepositoryInterface;
 use App\Infrastructure\ORM\EntityManagerServiceInterface;
-use Dto\UserDto;
+use App\Application\Dto\UserDto;
+
 
 class UserService implements UserServiceInterface
 {
@@ -29,7 +30,7 @@ class UserService implements UserServiceInterface
     {
         $userEntity = new UserEntity();
         $userEntity->setEmail($user->getEmail());
-        $userEntity->setName($user->getFirstName());//todo add all methods to dto object and match them with UserEntity
+        //$userEntity->setName($user->getFirstName());//todo add all methods to dto object and match them with UserEntity
 
         $this->entityManagerService->sync($userEntity);
 
@@ -41,7 +42,7 @@ class UserService implements UserServiceInterface
         $userEntity = $this->userRepository->findById($id);
         if ($userEntity) {
             $userEntity->setEmail($user->getEmail());
-            $userEntity->setName($user->getFirstName());
+            //$userEntity->setName($user->getFirstName());
         }
 
         $this->entityManagerService->sync($userEntity);
