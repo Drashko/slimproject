@@ -10,73 +10,97 @@
 
 {% block content %}
     <div class="container">
-{#        <div class="row flex-center min-vh-100 py-5">#}
-{#            <div class="col-sm-10 col-md-8 col-lg-5 col-xl-5 col-xxl-3"><a class="d-flex flex-center text-decoration-none mb-4" href="../../../index.html">#}
-{#                    <div class="d-flex align-items-center fw-bolder fs-5 d-inline-block"><img src="{{ asset('build/img/icons/logo.png') }}" alt="phoenix" width="58" />#}
-{#                    </div>#}
-{#                </a>#}
-{#                <div class="text-center mb-7">#}
-{#                    <h3 class="text-1000">Sign In</h3>#}
-{#                    <p class="text-700">Get access to your account</p>#}
-{#                </div>#}
-{#                <button class="btn btn-phoenix-secondary w-100 mb-3"><span class="fab fa-google text-danger me-2 fs--1"></span>Sign in with google</button>#}
-{#                <button class="btn btn-phoenix-secondary w-100"><span class="fab fa-facebook text-primary me-2 fs--1"></span>Sign in with facebook</button>#}
-{#                <div class="position-relative">#}
-{#                    <hr class="bg-200 mt-5 mb-4" />#}
-{#                    <div class="divider-content-center">or use email</div>#}
-{#                </div>#}
-{#                <div class="mb-3 text-start">#}
-
-{#                    <label class="form-label" for="email">Email address</label>#}
-{#                    <div class="form-icon-container">#}
-{#                        <input class="form-control form-icon-input" id="email" type="email" placeholder="name@example.com" /><span class="fas fa-user text-900 fs--1 form-icon"></span>#}
-{#                    </div>#}
 
 
-{#                </div>#}
-{#                <div class="mb-3 text-start">#}
+        <div class="row flex-center min-vh-100 py-5">
+            <div class="col-sm-10 col-md-8 col-lg-5 col-xl-5 col-xxl-3"><a class="d-flex flex-center text-decoration-none mb-4" href="../../../index.html">
+                    <div class="d-flex align-items-center fw-bolder fs-5 d-inline-block"><img src="{{ asset('build/img/icons/logo.png') }}" alt="phoenix" width="58" />
+                    </div>
+                </a>
+                <div class="text-center mb-7">
+                    <h3 class="text-1000">Sign In</h3>
+                    <p class="text-700">Get access to your account</p>
+                </div>
+                <button class="btn btn-phoenix-secondary w-100 mb-3"><span class="fab fa-google text-danger me-2 fs--1"></span>Sign in with google</button>
+                <button class="btn btn-phoenix-secondary w-100"><span class="fab fa-facebook text-primary me-2 fs--1"></span>Sign in with facebook</button>
+                <div class="position-relative">
+                    <hr class="bg-200 mt-5 mb-4" />
+                    <div class="divider-content-center">or use email</div>
+                </div>
 
-{#                    <label class="form-label" for="password">Password</label>#}
-{#                    <div class="form-icon-container">#}
-{#                        <input class="form-control form-icon-input" id="password" type="password" placeholder="Password" /><span class="fas fa-key text-900 fs--1 form-icon"></span>#}
-{#                    </div>#}
+                <div class="mb-3 text-start">
 
+                    <label class="form-label" for="email">Email address</label>
+                    <div class="form-icon-container">
+                        <input class="form-control form-icon-input" id="email" type="email" placeholder="name@example.com" /><span class="fas fa-user text-900 fs--1 form-icon"></span>
+                    </div>
 
-{#                </div>#}
-{#                <div class="row flex-between-center mb-7">#}
-{#                    <div class="col-auto">#}
-{#                        <div class="form-check mb-0">#}
-{#                            <input class="form-check-input" id="basic-checkbox" type="checkbox" checked="checked" />#}
-{#                            <label class="form-check-label mb-0" for="basic-checkbox">Remember me</label>#}
+{#                    {% block form_row %}#}
+{#                        <div class="form-group">#}
+{#                            {{ form_label(form, null, {'label_attr': {'class': 'form-label'}}) }}#}
+{#                            <div class="form-icon-container">#}
+{#                                {{ form_widget(form, {'attr': {'class': 'form-control form-icon-input'}}) }}#}
+{#                                <span class="fas fa-user text-900 fs--1 form-icon"></span>#}
+{#                            </div>#}
+{#                            {{ form_errors(form) }}#}
+{#                        </div>#}
+{#                    {% endblock %}#}
+
+{#                    {{ form_start(form) }}#}
+{#                    <div>#}
+{#                        {{ form_label(form.email, null, {'label_attr': {'class': 'form-label'}}) }}#}
+{#                        <div class="form-icon-container">#}
+{#                            {{ form_widget(form.email, {'attr': {'class': 'form-control form-icon-input', 'placeholder': 'name@example.com'}}) }}#}
+{#                            <svg class="svg-inline--fa fa-user text-body fs-9 form-icon" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">#}
+{#                                <path fill="currentColor" d="M224 256c70.7 0 128-57.31 128-128s-57.3-128-128-128C153.3 0 96 57.31 96 128S153.3 256 224 256zM274.7 304H173.3C77.61 304 0 381.6 0 477.3c0 19.14 15.52 34.67 34.66 34.67h378.7C432.5 512 448 496.5 448 477.3C448 381.6 370.4 304 274.7 304z"></path>#}
+{#                            </svg>#}
+{#                        </div>#}
+{#                        {{ form_label(form.password, null, {'label_attr': {'class': 'form-label'}}) }}#}
+{#                        <div class="form-icon-container">#}
+{#                            {{ form_widget(form.password, {'attr': {'class': 'form-control form-icon-input', 'placeholder': 'name@example.com'}}) }}#}
+{#                            <svg class="svg-inline--fa fa-user text-body fs-9 form-icon" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">#}
+{#                                <path fill="currentColor" d="M224 256c70.7 0 128-57.31 128-128s-57.3-128-128-128C153.3 0 96 57.31 96 128S153.3 256 224 256zM274.7 304H173.3C77.61 304 0 381.6 0 477.3c0 19.14 15.52 34.67 34.66 34.67h378.7C432.5 512 448 496.5 448 477.3C448 381.6 370.4 304 274.7 304z"></path>#}
+{#                            </svg>#}
 {#                        </div>#}
 {#                    </div>#}
-{#                    <div class="col-auto"><a class="fs--1 fw-semi-bold" href="/forgot_password">Forgot Password?</a></div>#}
-{#                </div>#}
-
-{#                <button class="btn btn-primary w-100 mb-3">Sign In</button>#}
+{#                    {{ form_end(form) }}#}
 
 
+                </div>
 
-{#                <div class="text-center"><a class="fs--1 fw-bold" href="/signup">Create an account</a></div>#}
-{#            </div>#}
-{#        </div>#}
+                <div class="mb-3 text-start">
 
-
-
-{#        {{ include("layout/form.twig") }}#}
-
-        {#{{ form(form, {'method': 'GET'}) }}#}
-
-{#        {{ form(form) }}#}
+                    <label class="form-label" for="password">Password</label>
+                    <div class="form-icon-container">
+                        <input class="form-control form-icon-input" id="password" type="password" placeholder="Password" /><span class="fas fa-key text-900 fs--1 form-icon"></span>
+                    </div>
 
 
-        {{ form_start(form) }}
-        {{ form_start(form, {'action': base_path('target_route'), 'method': 'GET'}) }}
-{#        {{ form_widget(form) }}#}
-            {{ form_row(form.email) }}
-            {{ form_row(form.password) }}
-        <button class="btn">{{ button_label|default('Save') }}</button>
-        {{ form_end(form) }}
+                </div>
+
+                <div class="row flex-between-center mb-7">
+                    <div class="col-auto">
+                        <div class="form-check mb-0">
+                            <input class="form-check-input" id="basic-checkbox" type="checkbox" checked="checked" />
+                            <label class="form-check-label mb-0" for="basic-checkbox">Remember me</label>
+                        </div>
+                    </div>
+                    <div class="col-auto"><a class="fs--1 fw-semi-bold" href="/forgot_password">Forgot Password?</a></div>
+                </div>
+
+                <button class="btn btn-primary w-100 mb-3">Sign In</button>
+
+
+
+                <div class="text-center"><a class="fs--1 fw-bold" href="/signup">Create an account</a></div>
+            </div>
+
+        </div>
+
+
+
+
+
 
 
         </div>
