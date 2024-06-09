@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Dto;
+namespace App\Application\Dto;
 
 final class UserRegistrationDto
 {

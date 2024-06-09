@@ -1,19 +1,20 @@
 <?php
+declare(strict_types=1);
 
-namespace Dto;
+namespace App\Application\Dto;
 
 final class UserDto
 {
 
     private  function __construct(
-        public string $firstName,
-        public string $lastName,
-        public string $email)
+        public string $email,
+        public string $password
+    )
     {}
 
-    public static function create($firstNam, $lastName,$email): UserDto
+    public static function create($email, $password): UserDto
     {
-        return new self($firstNam,$lastName,$email);
+        return new self($email,$password);
     }
 
     public function getEmail(): string
@@ -21,12 +22,10 @@ final class UserDto
         return $this->email;
     }
 
-    public function getFirstName(): string {
-        return $this->firstName;
-    }
 
-    public function getLastName(): string{
-        return $this->lastName;
+
+    public function getPassword(): string{
+        return $this->password;
     }
 
 

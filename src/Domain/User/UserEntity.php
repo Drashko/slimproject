@@ -24,6 +24,10 @@ class UserEntity
     #[Column(type: 'string')]
     private string $email;
 
+
+    #[Column(type: 'string')]
+    private string $password;
+
     #[Column(name: 'created_at', type: 'datetime')]
     private DateTime $createdAt;
 
@@ -66,6 +70,18 @@ class UserEntity
     {
         $this->createdAt = $createdAt;
     }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
+
+
 
 
 }
