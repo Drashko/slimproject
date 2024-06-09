@@ -12,6 +12,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
+use Dotenv\Validator;
 use Fullpipe\TwigWebpackExtension\WebpackExtension;
 use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
@@ -38,12 +39,15 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Form\Extension\Csrf\CsrfExtension;
+use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookup;
 use Symfony\WebpackEncoreBundle\Asset\TagRenderer;
@@ -106,12 +110,16 @@ return [
       $translator->addResource('array', $container->get('settings')['localization_path']['en'], 'en');
       return $translator;
     },
+    //add validation
+    ValidatorInterface::class => function () {
+       return Validation::createValidatorBuilder()->enableAttributeMapping()->getValidator();
+    },
     //add forms
-    FormFactoryInterface::class => function (): FormFactoryInterface {
+    FormFactoryInterface::class => function (ContainerInterface $container): FormFactoryInterface {
         $formFactoryBuilder = Forms::createFormFactoryBuilder();
         //todo add validation and csrf to from
-        //$formFactoryBuilder->addExtension(new ValidatorExtension($validator));
-        //$formFactoryBuilder->addExtension(new CsrfExtension(new CsrfTokenManager()));
+        $formFactoryBuilder->addExtension(new ValidatorExtension($container->get(ValidatorInterface::class)));
+        $formFactoryBuilder->addExtension(new CsrfExtension(new CsrfTokenManager()));
         return $formFactoryBuilder->getFormFactory();
     },
     // Twig templates

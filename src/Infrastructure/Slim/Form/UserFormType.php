@@ -3,14 +3,13 @@
 namespace App\Infrastructure\Slim\Form;
 
 use App\Application\Dto\UserDto;
-use App\Domain\User\UserEntity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class UserFormType extends AbstractType
 {
@@ -18,8 +17,18 @@ class UserFormType extends AbstractType
     {
         $builder
             //todo second param to add method can be added as a option - $options['password'],
-            ->add('email', EmailType::class)
-            ->add('password', PasswordType::class)
+            ->add('email', EmailType::class, [
+                'constraints' => [
+                    new Assert\NotBlank(),
+                    new Assert\Email(),
+                ],
+            ])
+            ->add('password', PasswordType::class, [
+                'constraints' => [
+                    new Assert\NotBlank()
+                    //todo add length validation
+                ],
+            ])
             ->add('submit', SubmitType::class);
     }
 
