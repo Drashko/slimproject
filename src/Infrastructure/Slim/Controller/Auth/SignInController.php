@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Slim\Controller\Auth;
 
+use App\Application\ApplicationInterface;
 use App\Application\Factory\LoggerFactory;
 use App\Infrastructure\Support\Config;
 use Exception;
@@ -17,16 +18,10 @@ class SignInController
 {
     private LoggerInterface $logger;
 
-    /**
-     * @param Config $config
-     * @param LoggerFactory $logger
-     * @param SessionInterface $session
-     * @param SessionManagerInterface $sessionManager
-     * @param Twig $twig
-     */
-    public function __construct(private readonly Config $config, LoggerFactory $logger, private readonly SessionInterface $session, private SessionManagerInterface $sessionManager, private readonly Twig $twig, private readonly Messages $flash) {
+    public function __construct(
+        private readonly ApplicationInterface $application) {
 
-        $this->logger = $logger->addFileHandler('home_action.log')->createLogger();
+        $this->logger = $application->getLogger()->addFileHandler('home_action.log')->createLogger();
     }
 
     /**
@@ -36,10 +31,9 @@ class SignInController
     {
 
         try {
-            // Log success
             $this->logger->info(sprintf('UserEntity created: %s', 123));
-            //$flash = $this->session->getFlash();
-            $this->flash->addMessage('success', 'Hi there!');
+            $flash = $this->application->getSession()->getFlash();
+            $this->application->getFlash()->addMessage('success', 'Hi there!');
             $viewData = [
                 'name' => 'World',
                 'notifications' => [
@@ -47,11 +41,8 @@ class SignInController
                 ],
             ];
 
-            $messages = $this->flash->getMessages();
-
-            //print_r($messages);
-
-            return $this->twig->render($response, 'authentication\signin.twig', $viewData);
+            $messages = $this->application->getFlash()->getMessages();
+            return $this->application->getTwig()->render($response, 'authentication\signin.twig', $viewData);
 
         } catch (Exception $exception) {
             // Log error message

@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Slim\Controller\Front;
 
+use App\Application\ApplicationInterface;
 use App\Application\Slim\Factory\LoggerFactory;
 use App\Infrastructure\Support\Config;
 use Exception;
@@ -17,16 +18,10 @@ class IndexController
 {
     private LoggerInterface $logger;
 
-    /**
-     * @param Config $config
-     * @param LoggerFactory $logger
-     * @param SessionInterface $session
-     * @param SessionManagerInterface $sessionManager
-     * @param Twig $twig
-     */
-    public function __construct(private readonly Config $config, LoggerFactory $logger, private readonly SessionInterface $session, private readonly Twig $twig, private readonly Messages $flash) {
 
-        $this->logger = $logger->addFileHandler('home_action.log')->createLogger();
+    public function __construct(private readonly ApplicationInterface $application) {
+
+        $this->logger = $application->getLogger()->addFileHandler('home_frondend_action.log')->createLogger();
     }
 
     /**
@@ -36,24 +31,23 @@ class IndexController
    {
 
        try {
+           //todo add post validation logic and proper messaging
            // Log success
            $this->logger->info(sprintf('UserEntity created: %s', 123));
-           //$flash = $this->session->getFlash();
-           $this->flash->addMessage('success', 'Hi there!');
+           $flash = $this->application->getSession()->getFlash();
+           $this->application->getFlash()->addMessage('success', 'Hi there!');
            $viewData = [
                'name' => 'World',
                'notifications' => [
                    'message' => 'You are good!'
                ],
            ];
-           //echo '<pre>';
-           //var_dump($flash);
 
-           $messages = $this->flash->getMessages();
+           $messages = $this->application->getFlash()->getMessages();
 
            //print_r($messages);
 
-           return $this->twig->render($response, 'frontend\index\index.twig', $viewData);
+           return $this->application->getTwig()->render($response, 'frontend\index\index.twig', $viewData);
 
        } catch (Exception $exception) {
            // Log error message

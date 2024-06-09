@@ -19,7 +19,9 @@ return function (App $app) {
 
     //admin
     $app->group('', function () use ($app) {
-        $app->get('/admin', [\App\Infrastructure\Slim\Controller\Admin\IndexController::class, 'index']);
+        $app->get('/{lang:bg|en}/admin', [\App\Infrastructure\Slim\Controller\Admin\IndexController::class, 'index']);
+//        $app->get('/{lang:bg}/admin', [\App\Infrastructure\Slim\Controller\Admin\IndexController::class, 'index']);
+//        $app->get('/{lang:en}/admin', [\App\Infrastructure\Slim\Controller\Admin\IndexController::class, 'index']);
         $app->get('/admin/users', [\App\Infrastructure\Slim\Controller\Admin\UserController::class, 'index']);
         $app->get('/admin/settings', [\App\Infrastructure\Slim\Controller\Admin\SettingsController::class, 'index']);
         $app->get('/admin/test', [\App\Application\Controller\Admin\TestController::class, 'index']);

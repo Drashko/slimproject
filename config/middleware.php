@@ -2,12 +2,16 @@
 
 use App\Infrastructure\Slim\Factory\LoggerFactory;
 use App\Infrastructure\Slim\Middleware\FlashMessagesMiddleware;
+use App\Infrastructure\Slim\Middleware\LocalizationMiddleware;
 use Odan\Session\Middleware\SessionStartMiddleware;
 use Slim\App;
 use Slim\Middleware\ErrorMiddleware;
 use Slim\Views\TwigMiddleware;
 
 return function (App $app) {
+
+    //add lang
+    $app->add(LocalizationMiddleware::class);
 
     //add flash messages
     $app->add(FlashMessagesMiddleware::class);
