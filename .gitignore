@@ -1,6 +1,7 @@
 vendor/
 .idea/
 .envco
+tests/
 
 .env
 public/.env
