@@ -30,8 +30,6 @@ class LocalizationMiddleware implements MiddlewareInterface
         $request = $request->withAttribute('language', $language);
         $request = $request->withUri($uri->withPath($path));
 
-        dump($request);
-
         return $handler->handle($request);
     }
 }

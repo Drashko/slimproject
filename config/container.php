@@ -42,6 +42,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
+use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\Translator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookup;
@@ -97,12 +98,16 @@ return [
         return $errorMiddleware;
     },
     //add translation
-    TranslatorInterface::class => function (){
-      return new Translator('en');
+    TranslatorInterface::class => function (ContainerInterface $container)  {
+      $loader = new ArrayLoader();
+      $translator = new Translator('en');
+      $translator->addLoader('array', $loader);
+      $translator->addResource('array', $container->get('settings')['localization_path']['bg'], 'bg' );
+      $translator->addResource('array', $container->get('settings')['localization_path']['en'], 'en');
+      return $translator;
     },
     //add forms
     FormFactoryInterface::class => function (): FormFactoryInterface {
-//
         $formFactoryBuilder = Forms::createFormFactoryBuilder();
         //todo add validation and csrf to from
         //$formFactoryBuilder->addExtension(new ValidatorExtension($validator));
@@ -144,7 +149,6 @@ return [
         $twig->addExtension(new AssetExtension($container->get('webpack_encore.packages')));
         $twig->addExtension(new FormExtension());
         $twig->addExtension(new TranslationExtension($container->get(TranslatorInterface::class)));
-
 
         return $twig;
     },

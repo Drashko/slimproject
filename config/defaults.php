@@ -79,6 +79,12 @@ $settings['doctrine']  = [
         'charset' => 'utf8'
     ]
 ];
+//add localization paths
+$settings['localization_path'] = [
+    'bg' => __DIR__ . '/../Localization/bg.php',
+    'en' => __DIR__ . '/../Localization/bg.php',
+];
+
 //add commands here
 $settings['commands'] = [
     \App\Infrastructure\Slim\Command\ExampleCommand::class,
