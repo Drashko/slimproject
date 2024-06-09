@@ -29,7 +29,7 @@ class UserFormType extends AbstractType
             'data_class' => UserDto::class,//or use UserDto
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
-            'csrf_token_id'   => 'user_type_token_id',
+            'csrf_token_id' => 'user_type_token_id',
 //            'email' => null,
 //            'password' => null,
         ]);
