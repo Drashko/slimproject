@@ -22,7 +22,7 @@ interface ApplicationInterface
 
     public function getConfig() : Config;
 
-    public function getFromFactory() : FormFactoryInterface;
+    public function getFormFactory() : FormFactoryInterface;
 
     //todo add validation
 

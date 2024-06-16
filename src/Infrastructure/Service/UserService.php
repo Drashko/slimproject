@@ -7,7 +7,6 @@ use App\Application\Dto\UserDto;
 use App\Application\User\UserServiceInterface;
 use App\Domain\Entity\UserEntity;
 use App\Domain\Repository\UserRepositoryInterface;
-use App\Infrastructure\ORM\EntityManagerAdapterServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 
@@ -15,8 +14,8 @@ class UserService implements UserServiceInterface
 {
 
     public function __construct(
-        private readonly UserRepositoryInterface     $userRepository,
-        private readonly EntityManagerInterface $entityManager
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly EntityManagerInterface  $entityManager
     )
     {
     }
