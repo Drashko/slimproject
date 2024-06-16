@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Role;
+namespace App\Domain\Entity;
 
 class RoleEntity
 {

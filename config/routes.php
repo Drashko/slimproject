@@ -22,17 +22,17 @@ return function (App $app) {
         $app->get('/{lang:bg|en}/admin', [\App\Infrastructure\Slim\Controller\Admin\IndexController::class, 'index']);
 //        $app->get('/{lang:bg}/admin', [\App\Infrastructure\Slim\Controller\Admin\IndexController::class, 'index']);
 //        $app->get('/{lang:en}/admin', [\App\Infrastructure\Slim\Controller\Admin\IndexController::class, 'index']);
-        $app->get('/admin/users', [\App\Infrastructure\Slim\Controller\Admin\UserController::class, 'index']);
-        $app->get('/admin/settings', [\App\Infrastructure\Slim\Controller\Admin\SettingsController::class, 'index']);
+        $app->get('/{lang:bg|en}/admin/users', [\App\Infrastructure\Slim\Controller\Admin\UserController::class, 'index']);
+        $app->get('/{lang:bg|en}/admin/settings', [\App\Infrastructure\Slim\Controller\Admin\SettingsController::class, 'index']);
         //$app->get('/admin/tests', [\App\Application\Controller\Admin\TestController::class, 'index']);
     });
     //front end
     $app->group('', function(RouteCollectorProxy $authentication) {
-        $authentication->get('/', [\App\Infrastructure\Slim\Controller\Front\IndexController::class, 'index']);
-        $authentication->get('/signin', [\App\Infrastructure\Slim\Controller\Auth\SignInController::class, 'index']);
-        $authentication->get('/signup', [\App\Infrastructure\Slim\Controller\Auth\SignUpController::class, 'index']);
-        $authentication->post('/signup', [\App\Infrastructure\Slim\Controller\Auth\SignUpController::class, 'index']);
-        $authentication->get('/forgot_password', [\App\Infrastructure\Slim\Controller\Auth\ForgotPasswordController::class, 'index']);
+        $authentication->get('/{lang:bg|en}', [\App\Infrastructure\Slim\Controller\Front\IndexController::class, 'index']);
+        $authentication->get('/{lang:bg|en}/signin', [\App\Infrastructure\Slim\Controller\Auth\SignInController::class, 'index']);
+        $authentication->get('/{lang:bg|en}/signup', [\App\Infrastructure\Slim\Controller\Auth\SignUpController::class, 'index']);
+        $authentication->post('/{lang:bg|en}/signup', [\App\Infrastructure\Slim\Controller\Auth\SignUpController::class, 'index']);
+        $authentication->get('/{lang:bg|en}/forgot_password', [\App\Infrastructure\Slim\Controller\Auth\ForgotPasswordController::class, 'index']);
     });
 
     

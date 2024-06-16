@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Application\User;
 
 use App\Application\Dto\UserDto;
-use App\Domain\User\UserEntity;
+use App\Domain\Entity\UserEntity;
 
 interface UserServiceInterface
 {
@@ -14,6 +14,6 @@ interface UserServiceInterface
 
    public function delete(int $userId) : bool;
 
-   public function list(array $params) : array;
+   public function list(?array $params) : array;
 
 }

@@ -9,9 +9,9 @@ return function (array $settings): array {
    // $settings['logger']['level'] = Logger::Debug;
 
     // Database name
-    $settings['db']['database'] = 'my_dev_database';
-    $settings['db']['username'] = 'drash';
-    $settings['db']['password'] = '134jhed';
+    $settings['db']['database'] = 'slim';
+    $settings['db']['username'] = 'root';
+    $settings['db']['password'] = '';
 
     return $settings;
 };

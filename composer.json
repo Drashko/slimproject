@@ -21,7 +21,7 @@
         "symfony/validator": "^6.4",
         "symfony/security-csrf": "^6.4",
         "symfony/translation": "^6.4",
-        "phpspec/prophecy-phpunit": "^2.2"
+        "ext-pdo": "*"
     },
     "autoload": {
         "psr-4": {

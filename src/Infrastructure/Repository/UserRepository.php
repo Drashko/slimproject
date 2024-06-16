@@ -2,17 +2,15 @@
 
 namespace App\Infrastructure\Repository;
 
-use App\Domain\User\UserEntity;
-use App\Domain\User\UserRepositoryInterface;
-use App\Infrastructure\ORM\EntityManagerServiceInterface;
+use App\Domain\Entity\UserEntity;
+use App\Domain\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 
 class UserRepository implements UserRepositoryInterface
 {
 
-    public function __construct(public  EntityManagerServiceInterface $entityManagerService)
+    public function __construct(public EntityManagerInterface $entityManager)
     {
     }
 
@@ -21,7 +19,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function findById($id): ?UserEntity
     {
-        $query = $this->entityManagerService->entityManager()->createQuery('Select u from App\Domain\User\UserEntity u WHERE u.id = :id');
+        $query = $this->entityManager->createQuery('Select u from App\Domain\Entity\UserEntity u WHERE u.id = :id');
         $query->setParameter('id', $id);
         return $query->getOneOrNullResult();
     }
@@ -31,19 +29,21 @@ class UserRepository implements UserRepositoryInterface
      */
     public function findByEmail(string $email): UserEntity
     {
-        $query = $this->entityManagerService->entityManager()->createQuery('Select u from App\Domain\User\UserEntity u WHERE u.email = :email');
+        $query = $this->entityManager->createQuery('Select u from App\Domain\Entity\UserEntity u WHERE u.email = :email');
         $query->setParameter('email', $email);
         return $query->getOneOrNullResult();
     }
 
     //todo add filer params in where clause
-    public function list(array $params): array
+    public function list(?array $params): array
     {
+
+        //dump($params);
 //      $builder = $this->entityManagerService->entityManager()->createQueryBuilder();
 //       return $builder->getQuery()->getResult();
-     $query = $this->entityManagerService->entityManager()->createQuery('Select u from App\Domain\User\UserEntity u');
+        $query = $this->entityManager->createQuery('Select u from App\Domain\Entity\UserEntity u');
 
-      return $query->getResult();
+        return $query->getResult();
 
     }
 }

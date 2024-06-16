@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Application\Access;
 
-use App\Domain\User\UserEntity;
+use App\Domain\Entity\UserEntity;
 
 interface AuthenticationInterface
 {

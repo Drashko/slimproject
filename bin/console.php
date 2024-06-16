@@ -1,6 +1,5 @@
 <?php
 
-use App\Factory\ContainerFactory;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
@@ -24,3 +23,7 @@ try {
     echo $exception->getMessage();
     exit(1);
 }
+
+//todo commands
+//todo php cli-config.php orm:schema-tool:create - doctrine commands
+//todo php bin/console.php example - custom command execution

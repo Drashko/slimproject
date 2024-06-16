@@ -3,7 +3,7 @@
 namespace App\Infrastructure\Slim\Controller\Auth;
 
 use App\Application\Factory\LoggerFactory;
-use App\Infrastructure\ORM\EntityManagerServiceInterface;
+use App\Infrastructure\ORM\EntityManagerAdapterServiceInterface;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,13 +19,13 @@ class SignUpController
      * @param LoggerFactory $logger
      * @param Twig $twig
      * @param Messages $flash
-     * @param EntityManagerServiceInterface $entityManager
+     * @param EntityManagerAdapterServiceInterface $entityManager
      */
     public function __construct(
         LoggerFactory $logger,
         private readonly Twig $twig,
         private readonly Messages $flash,
-        private readonly EntityManagerServiceInterface $entityManager
+        private readonly EntityManagerAdapterServiceInterface $entityManager
     ) {
 
         $this->logger = $logger->addFileHandler('home_action.log')->createLogger();

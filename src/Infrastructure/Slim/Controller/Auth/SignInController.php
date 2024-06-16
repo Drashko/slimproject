@@ -4,7 +4,6 @@ namespace App\Infrastructure\Slim\Controller\Auth;
 
 use App\Application\ApplicationInterface;
 use App\Application\Dto\UserDto;
-use App\Domain\User\UserEntity;
 use App\Infrastructure\Slim\Form\UserFormType;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
@@ -29,6 +28,7 @@ class SignInController
     {
 
         try {
+
             // Log success
            // $this->logger->info(sprintf('UserEntity created: %s', 123));
             //$flash = $this->session->getFlash();

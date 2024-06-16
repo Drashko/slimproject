@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\User;
+namespace App\Domain\Entity;
 
 use App\Infrastructure\Repository\UserRepository;
 use DateTime;
@@ -29,7 +29,7 @@ class UserEntity
     private string $password;
 
     #[Column(name: 'created_at', type: 'datetime')]
-    private DateTime $createdAt;
+    private ?DateTime $createdAt;
 
     public function getId(): ?int
     {
@@ -66,7 +66,7 @@ class UserEntity
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt): void
+    public function setCreatedAt(?DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
