@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace App\Application\Access;
 
 
-use App\Domain\Permission\PermissionEntity;
-use App\Domain\Role\RoleEntity;
+use App\Domain\Entity\PermissionEntity;
+use App\Domain\Entity\RoleEntity;
 
 interface AuthorizationInterface
 {

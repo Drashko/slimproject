@@ -1,7 +1,7 @@
 <?php
 
 use DI\ContainerBuilder;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 
@@ -20,7 +20,7 @@ try {
 }
 
 // Create Slim App instance
-$entityManager = $container->get(EntityManager::class);
+$entityManager = $container->get(EntityManagerInterface::class);
 // replace with path to your own project bootstrap file
 //require_once 'bootstrap.php';
 

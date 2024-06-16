@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\RolePermission;
+namespace App\Domain\Entity;
 
 class RolePermissionEntity
 {

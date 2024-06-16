@@ -2,6 +2,8 @@
 // Should be set to 0 in production
 
 
+use App\Infrastructure\Slim\Command\ExampleCommand;
+
 error_reporting(E_ALL);
 
 // Should be set to '0' in production
@@ -63,7 +65,8 @@ $settings['doctrine']  = [
     // List of paths where Doctrine will search for metadata.
     // Metadata can be either YML/XML files or PHP classes annotated
     // with comments or PHP8 attributes.
-    'metadata_dirs' => [__DIR__ . '/src/Domain/Entity'],
+//    'metadata_dirs' => [__DIR__ . '/src/Domain/Entity'],
+    'metadata_dirs' => [__DIR__ . '/../src/Domain/Entity'],
     // The parameters Doctrine needs to connect to your database.
     // These parameters depend on the driver (for instance the 'pdo_sqlite' driver
     // needs a 'path' parameter and doesn't use most of the ones shown in this example).
@@ -87,7 +90,7 @@ $settings['localization_path'] = [
 
 //add commands here
 $settings['commands'] = [
-    \App\Infrastructure\Slim\Command\ExampleCommand::class,
+    ExampleCommand::class,
     // Add more here...
 ];
 

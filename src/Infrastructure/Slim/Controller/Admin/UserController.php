@@ -34,6 +34,8 @@ class UserController
             //$flash = $this->session->getFlash();
             $this->application->getFlash()->addMessage('success', 'Hi there!');
 
+            dump($request->getQueryParams());
+
             $userList = $this->userService->list($request->getQueryParams());
 
             $messages = $this->application->getFlash()->getMessages();

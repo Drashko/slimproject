@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Service;
 
-use App\Application\User\UserServiceInterface;
-use App\Domain\User\UserEntity;
-use App\Domain\User\UserRepositoryInterface;
-use App\Infrastructure\ORM\EntityManagerServiceInterface;
 use App\Application\Dto\UserDto;
+use App\Application\User\UserServiceInterface;
+use App\Domain\Entity\UserEntity;
+use App\Domain\Repository\UserRepositoryInterface;
+use App\Infrastructure\ORM\EntityManagerAdapterServiceInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 
 class UserService implements UserServiceInterface
@@ -15,12 +16,12 @@ class UserService implements UserServiceInterface
 
     public function __construct(
         private readonly UserRepositoryInterface     $userRepository,
-        private readonly EntityManagerServiceInterface $entityManagerService
+        private readonly EntityManagerInterface $entityManager
     )
     {
     }
 
-    public function list(array $params): array
+    public function list(?array $params): array
     {
         return $this->userRepository->list($params);
     }
@@ -29,10 +30,12 @@ class UserService implements UserServiceInterface
     public function create(UserDto $user): UserEntity
     {
         $userEntity = new UserEntity();
+        $userEntity->setName($user->getName());
+        $userEntity->setPassword($user->getPassword());
         $userEntity->setEmail($user->getEmail());
-        //$userEntity->setName($user->getFirstName());//todo add all methods to dto object and match them with UserEntity
 
-        $this->entityManagerService->sync($userEntity);
+        $this->entityManager->persist($userEntity);
+        $this->entityManager->flush();
 
         return $userEntity;
     }
@@ -42,10 +45,12 @@ class UserService implements UserServiceInterface
         $userEntity = $this->userRepository->findById($id);
         if ($userEntity) {
             $userEntity->setEmail($user->getEmail());
-            //$userEntity->setName($user->getFirstName());
+            $userEntity->setName($user->getName());
+            $userEntity->setPassword($user->getPassword());
         }
 
-        $this->entityManagerService->sync($userEntity);
+        $this->entityManager->persist($userEntity);
+//        $this->entityManager->flush();todo check if flush is needed on update
 
         return $userEntity;
 
@@ -56,7 +61,7 @@ class UserService implements UserServiceInterface
         $userEntity = $this->userRepository->findById($userId);
 
         if ($userEntity) {
-            $this->entityManagerService->sync($userEntity);
+            $this->entityManager->remove($userEntity);
             return true;
         }
 

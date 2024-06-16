@@ -5,7 +5,7 @@ namespace App\Infrastructure\ORM;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-interface EntityManagerServiceInterface
+interface EntityManagerAdapterServiceInterface
 {
     public function __call(string $name, array $arguments);
 

@@ -4,7 +4,7 @@ namespace App\Infrastructure\ORM;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-class EntityManagerAdapterService implements EntityManagerServiceInterface
+class EntityManagerAdapterAdapterService implements EntityManagerAdapterServiceInterface
 {
 
     public function __construct(protected readonly EntityManagerInterface $entityManager)

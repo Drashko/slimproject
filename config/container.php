@@ -2,8 +2,8 @@
 
 use App\Application\ApplicationInterface;
 use App\Application\User\UserServiceInterface;
-use App\Domain\User\UserRepositoryInterface;
-use App\Infrastructure\ORM\EntityManagerServiceInterface;
+use App\Domain\Repository\UserRepositoryInterface;
+use App\Infrastructure\ORM\EntityManagerAdapterServiceInterface;
 use App\Infrastructure\Repository\UserRepository;
 use App\Infrastructure\Slim\Factory\LoggerFactory;
 use App\Infrastructure\Slim\Handler\NotFoundHandler;
@@ -13,7 +13,6 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
-use Dotenv\Validator;
 use Fullpipe\TwigWebpackExtension\WebpackExtension;
 use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
@@ -265,9 +264,9 @@ return [
         return $container->get(Psr17Factory::class);
     },
 
-    EntityManagerServiceInterface::class => function (ContainerInterface $container) {
+    EntityManagerAdapterServiceInterface::class => function (ContainerInterface $container) {
         $entityManager = $container->get(EntityManagerInterface::class);
-        return new \App\Infrastructure\ORM\EntityManagerAdapterService($entityManager);
+        return new \App\Infrastructure\ORM\EntityManagerAdapterAdapterService($entityManager);
     },
 
     ApplicationInterface::class => function (ContainerInterface $container) {
@@ -282,14 +281,12 @@ return [
     },
 
     UserRepositoryInterface::class => function (ContainerInterface $container) {
-        return new UserRepository($container->get(EntityManagerServiceInterface::class));
+        return new UserRepository($container->get(EntityManagerInterface::class));
     },
 
     UserServiceInterface::class => function (ContainerInterface $container) {
         return new \App\Infrastructure\Service\UserService(
-            $container->get(UserRepositoryInterface::class),
-            $container->get(EntityManagerServiceInterface::class),
-
+            $container->get(UserRepositoryInterface::class)
         );
     }
 ];

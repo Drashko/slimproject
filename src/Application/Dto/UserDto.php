@@ -7,15 +7,22 @@ final class UserDto
 {
 
     private  function __construct(
+        public string $name,
         public string $email,
         public string $password
     )
     {}
 
-    public static function create($email, $password): UserDto
+    public static function create(string $name, string  $email, string $password): UserDto
     {
-        return new self($email,$password);
+        return new self($name, $email,$password);
     }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
 
     public function getEmail(): string
     {
