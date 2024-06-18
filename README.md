@@ -1,2 +1,2 @@
-# Slim-project
+# slim-project
 Php framework using Slim 
