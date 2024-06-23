@@ -14,8 +14,6 @@ $boolean = function(mixed $value) {
     return false;
 };
 
-dump(CONFIG_PATH);
-dump(BUILD_PATH);
 
 //todo Important research about the right way to set env files
 //$appEnv       = $_ENV['APP_ENV'] ?? AppEnvironment::Prod->value;
