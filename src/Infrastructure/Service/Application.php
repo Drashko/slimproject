@@ -47,8 +47,9 @@ class Application implements ApplicationInterface
         return $this->config;
     }
 
-    public function getFromFactory(): FormFactoryInterface
+    public function getFormFactory(): FormFactoryInterface
     {
         return $this->formFactory;
     }
+
 }
