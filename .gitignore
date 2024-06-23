@@ -4,7 +4,7 @@ vendor/
 
 .env
 public/.env
-
+.htaccess
 env.php
 config/env.php
 

@@ -3,8 +3,10 @@
 use App\Application\ApplicationInterface;
 use App\Application\User\UserServiceInterface;
 use App\Domain\Repository\UserRepositoryInterface;
+use App\Infrastructure\ORM\EntityManagerAdapterAdapterService;
 use App\Infrastructure\ORM\EntityManagerAdapterServiceInterface;
 use App\Infrastructure\Repository\UserRepository;
+use App\Infrastructure\Service\UserService;
 use App\Infrastructure\Slim\Factory\LoggerFactory;
 use App\Infrastructure\Slim\Handler\NotFoundHandler;
 use App\Infrastructure\Support\Config;
@@ -266,7 +268,7 @@ return [
 
     EntityManagerAdapterServiceInterface::class => function (ContainerInterface $container) {
         $entityManager = $container->get(EntityManagerInterface::class);
-        return new \App\Infrastructure\ORM\EntityManagerAdapterAdapterService($entityManager);
+        return new EntityManagerAdapterAdapterService($entityManager);
     },
 
     ApplicationInterface::class => function (ContainerInterface $container) {
@@ -285,8 +287,9 @@ return [
     },
 
     UserServiceInterface::class => function (ContainerInterface $container) {
-        return new \App\Infrastructure\Service\UserService(
-            $container->get(UserRepositoryInterface::class)
+        return new UserService(
+            $container->get(UserRepositoryInterface::class),
+            $container->get(EntityManagerInterface::class)
         );
     }
 ];
