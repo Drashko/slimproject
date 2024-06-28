@@ -16,8 +16,10 @@ $boolean = function(mixed $value) {
 
 
 //todo Important research about the right way to set env files
-//$appEnv       = $_ENV['APP_ENV'] ?? AppEnvironment::Prod->value;
-$appEnv       = $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? AppEnvironment::Prod->value;
+$appEnv = $_ENV['APP_ENV'] ?? AppEnvironment::Prod->value;
+//$appEnv = $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? AppEnvironment::Prod->value;
+
+dump($appEnv);
 
 $appSnakeName = strtolower(str_replace(' ', '_', $_ENV['APP_NAME']));
 
@@ -52,7 +54,7 @@ return [
         // Twig environment options
         'options' => [
             'debug' => $boolean($_ENV['APP_DEBUG'] ?? 0),
-            'cache_enabled' => AppEnvironment::isDevelopment($appEnv), //todo  Should be set to true in production
+            'cache_enabled' => AppEnvironment::isProduction($appEnv), //todo  Should be set to true in production
             'cache_path' => __DIR__ . '/../tmp/twig'
         ],
         'form_theme' => 'layout/form.twig'
@@ -77,7 +79,7 @@ return [
             'driver' => $_ENV['DB_DRIVER'] ?? 'pdo_mysql',
             'host' => $_ENV['DB_HOST'] ?? 'localhost',
             'port' => $_ENV['DB_PORT'] ?? 3306,
-            'dbname' => $_ENV['DB_NAME'],
+            'dbname' => $appEnv === "test" ? $_ENV['TEST_DB_NAME'] : $_ENV['DB_NAME'],
             'user' => $_ENV['DB_USER'],
             'password' => $_ENV['DB_PASS'],
             'charset' => 'utf8'
