@@ -79,7 +79,7 @@ return [
             'driver' => $_ENV['DB_DRIVER'] ?? 'pdo_mysql',
             'host' => $_ENV['DB_HOST'] ?? 'localhost',
             'port' => $_ENV['DB_PORT'] ?? 3306,
-            'dbname' => $appEnv === "test" ? $_ENV['TEST_DB_NAME'] : $_ENV['DB_NAME'],
+            'dbname' => AppEnvironment::isTest($appEnv) ? $_ENV['TEST_DB_NAME'] : $_ENV['DB_NAME'],
             'user' => $_ENV['DB_USER'],
             'password' => $_ENV['DB_PASS'],
             'charset' => 'utf8'
