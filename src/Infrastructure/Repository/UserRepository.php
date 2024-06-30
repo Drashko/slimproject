@@ -14,10 +14,10 @@ use Doctrine\ORM\NoResultException;
 class UserRepository extends EntityRepository implements UserRepositoryInterface
 {
 
-    public function __construct(EntityManagerInterface $em, ClassMetadata $class)
-    {
-        parent::__construct($em, $class);
-    }
+//    public function __construct(EntityManagerInterface $em, ClassMetadata $class)
+//    {
+//        parent::__construct($em, $class);
+//    }
 
     public function findById($id): ?UserEntity
     {

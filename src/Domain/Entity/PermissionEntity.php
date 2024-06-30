@@ -2,55 +2,34 @@
 
 namespace App\Domain\Entity;
 
+use App\Infrastructure\Repository\PermissionRepository;
 use DateTime;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping as ORM;
 
-/**
- * PermissionEntity
- *
- * @ORM\Table(
- *     name="permission",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idx_permission_name", columns={"name"})}
- * )
- * @ORM\Entity(repositoryClass="Potievdev\SlimRbac\Models\Repository\PermissionRepository")
- * @ORM\HasLifecycleCallbacks
- */
+#[ORM\Entity(repositoryClass: PermissionRepository::class)]
+#[ORM\Table(name: "permission", uniqueConstraints: [new ORM\UniqueConstraint(name: "idx_permission_name", columns: ["name"])])]
+#[ORM\HasLifecycleCallbacks]
 class PermissionEntity
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\Column(name: "id", type: "integer", nullable: false)]
+    private int $id;
 
-    #[Id]
-    #[Column(type: 'integer', nullable: false)]
-    #[GeneratedValue(strategy: "IDENTITY")]
-    private int|null $id = null;
-
-    #[Column(type: 'string',length: 100, nullable: false)]
+    #[ORM\Column(name: "name", type: "string", length: 100, nullable: false)]
     private string $name;
 
-    #[Column(type: 'boolean', nullable: false)]
-    private string|bool $status = '1';
+    #[ORM\Column(name: "status", type: "boolean", nullable: false)]
+    private bool $status = true;
 
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: "created_at", type: "datetime", nullable: false)]
     private DateTime $createdAt;
 
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
-     */
-    private DateTime $updatedAt;
+    #[ORM\Column(name: "updated_at", type: "datetime", nullable: true)]
+    private ?DateTime $updatedAt;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="string", nullable=true)
-     */
-    private string $description;
+    #[ORM\Column(name: "description", type: "string", nullable: true)]
+    private ?string $description;
 
     public function getId(): int
     {
@@ -77,7 +56,7 @@ class PermissionEntity
         return $this->status;
     }
 
-    public function setStatus(bool $status)
+    public function setStatus(bool $status): void
     {
         $this->status = $status;
     }
@@ -87,39 +66,39 @@ class PermissionEntity
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function getUpdatedAt(): DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(?DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription(string $description)
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
 
-    /** @ORM\PrePersist  */
-    public function prePersist()
+    #[ORM\PrePersist]
+    public function prePersist(): void
     {
         $this->createdAt = new DateTime();
     }
 
-    /** @ORM\PreUpdate  */
-    public function preUpdate()
+    #[ORM\PreUpdate]
+    public function preUpdate(): void
     {
         $this->updatedAt = new DateTime();
     }
