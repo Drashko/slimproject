@@ -1,0 +1,5 @@
+run unit tests: composer test
+
+
+doctrine commands:
+php cli-config.php  orm:schema:create

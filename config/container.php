@@ -14,6 +14,7 @@ use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\ORMSetup;
 use Fullpipe\TwigWebpackExtension\WebpackExtension;
 use Odan\Session\PhpSession;
@@ -266,10 +267,12 @@ return [
         return $container->get(Psr17Factory::class);
     },
 
-    EntityManagerAdapterServiceInterface::class => function (ContainerInterface $container) {
-        $entityManager = $container->get(EntityManagerInterface::class);
-        return new EntityManagerAdapterAdapterService($entityManager);
-    },
+
+//not in use
+//    EntityManagerAdapterServiceInterface::class => function (ContainerInterface $container) {
+//        $entityManager = $container->get(EntityManagerInterface::class);
+//        return new EntityManagerAdapterAdapterService($entityManager);
+//    },
 
     ApplicationInterface::class => function (ContainerInterface $container) {
         return new \App\Infrastructure\Service\Application(
@@ -282,8 +285,15 @@ return [
         );
     },
 
+    ClassMetadata::class => function (ContainerInterface $container) {
+        return new ClassMetadata($container->get(EntityManagerInterface::class));
+    },
+
     UserRepositoryInterface::class => function (ContainerInterface $container) {
-        return new UserRepository($container->get(EntityManagerInterface::class));
+        return new UserRepository(
+            $container->get(EntityManagerInterface::class),
+                $container->get(ClassMetadata::class)
+        );
     },
 
     UserServiceInterface::class => function (ContainerInterface $container) {

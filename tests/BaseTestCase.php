@@ -16,6 +16,8 @@ class BaseTestCase extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        error_reporting(E_ALL);
+
         self::$app = require  __DIR__ . '/../config/bootstrap.php';
 
         self::$container = self::$app->getContainer();

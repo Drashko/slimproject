@@ -7,6 +7,7 @@ use App\Application\Dto\UserDto;
 use App\Application\User\UserServiceInterface;
 use App\Domain\Entity\UserEntity;
 use App\Domain\Repository\UserRepositoryInterface;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 
 
@@ -32,6 +33,7 @@ class UserService implements UserServiceInterface
         $userEntity->setName($user->getName());
         $userEntity->setPassword($user->getPassword());
         $userEntity->setEmail($user->getEmail());
+        $userEntity->setCreatedAt(new DateTime('now'));
 
         $this->entityManager->persist($userEntity);
         $this->entityManager->flush();
@@ -49,7 +51,7 @@ class UserService implements UserServiceInterface
         }
 
         $this->entityManager->persist($userEntity);
-//        $this->entityManager->flush();todo check if flush is needed on update
+        $this->entityManager->flush();
 
         return $userEntity;
 
