@@ -24,7 +24,6 @@ class UserEntity
     #[Column(type: 'string')]
     private string $email;
 
-
     #[Column(type: 'string')]
     private string $password;
 

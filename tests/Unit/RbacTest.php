@@ -3,8 +3,13 @@
 namespace Unit;
 
 use PHPUnit\Framework\TestCase;
+use Tests\BaseTestCase;
 
-class RbacTest extends TestCase
+class RbacTest extends BaseTestCase
 {
-   //todo implement all the functionality about add role to user add permission to role add parent and child roles!!!!
+   public function test()
+   {
+       //todo implement
+       $this->assertTrue(true);
+   }
 }

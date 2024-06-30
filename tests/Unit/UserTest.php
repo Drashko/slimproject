@@ -4,34 +4,30 @@ namespace Unit;
 
 use App\Domain\Entity\UserEntity;
 use App\Domain\Repository\UserRepositoryInterface;
-use App\Infrastructure\ORM\EntityManagerAdapterServiceInterface;
-use App\Infrastructure\Repository\UserRepository;
-use DI\ContainerBuilder;
+use DateTime;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
-use PHPUnit\Framework\TestCase;
-use Slim\Factory\AppFactory;
+use Exception;
 use Tests\BaseTestCase;
 
 class UserTest extends BaseTestCase
 {
-
     /**
      * @throws DependencyException
      * @throws ToolsException
      * @throws NotFoundException
-     * @throws \Exception
+     * @throws Exception
      */
     public function setUp(): void
     {
 
-        $this->container = self::getContainer();
+        $container = self::getContainer();
 
-        $this->entityManager = $this->container->get(EntityManagerInterface::class);
-        $this->userRepository = $this->container->get(UserRepositoryInterface::class);
+        $this->entityManager = $container->get(EntityManagerInterface::class);
+        $this->userRepository = $container->get(UserRepositoryInterface::class);
 
         $schemaTool = new SchemaTool($this->entityManager);
         $classes = $this->entityManager->getMetadataFactory()->getAllMetadata();
@@ -53,7 +49,7 @@ class UserTest extends BaseTestCase
         $user->setName('John Doe');
         $user->setPassword('122565yup');
         $user->setEmail('john@example.com');
-        $user->setCreatedAt(new \DateTime('now'));
+        $user->setCreatedAt(new DateTime('now'));
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

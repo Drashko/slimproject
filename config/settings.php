@@ -19,8 +19,6 @@ $boolean = function(mixed $value) {
 $appEnv = $_ENV['APP_ENV'] ?? AppEnvironment::Prod->value;
 //$appEnv = $_ENV['APP_ENV'] ?? $_SERVER['APP_ENV'] ?? AppEnvironment::Prod->value;
 
-dump($appEnv);
-
 $appSnakeName = strtolower(str_replace(' ', '_', $_ENV['APP_NAME']));
 
 error_reporting(E_ALL);
