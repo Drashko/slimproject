@@ -6,16 +6,12 @@ use App\Application\Dto\UserDto;
 use App\Application\User\UserServiceInterface;
 use App\Domain\Entity\UserEntity;
 use App\Domain\Repository\UserRepositoryInterface;
-use App\Infrastructure\Service\UserService;
-use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
 use Exception;
-use JetBrains\PhpStorm\NoReturn;
-use PHPUnit\Framework\TestCase;
 use Tests\BaseTestCase;
 
 class UserServiceTest extends BaseTestCase
@@ -35,7 +31,6 @@ class UserServiceTest extends BaseTestCase
 
         $this->entityManager = $container->get(EntityManagerInterface::class);
         $this->userRepository = $container->get(UserRepositoryInterface::class);
-
         $this->userService = $container->get(UserServiceInterface::class);
 
         $schemaTool = new SchemaTool($this->entityManager);
@@ -52,7 +47,7 @@ class UserServiceTest extends BaseTestCase
     }
 
 
-    public function testCreateUser() : UserEntity
+    public function testCreateUser(): UserEntity
     {
         $userDto = UserDto::create('test', 'dr@gmail.com', '12345664');
         $newUser = $this->userService->create($userDto);
@@ -64,7 +59,8 @@ class UserServiceTest extends BaseTestCase
     }
 
 
-    public function testUpdateUser(): void{
+    public function testUpdateUser(): void
+    {
 
         $userDto = UserDto::create('test', 'dr@gmail.com', '12345664');
         $newUser = $this->userService->create($userDto);
@@ -76,4 +72,18 @@ class UserServiceTest extends BaseTestCase
         $this->assertInstanceOf(UserEntity::class, $updatedUser);
         $this->assertEquals('test2', $updatedUser->getName());
     }
+
+    public function testDeleteUser(): void
+    {
+
+        $userDto = UserDto::create('test', 'dr@gmail.com', '12345664');
+        $newUser = $this->userService->create($userDto);
+        $findUserByEmail = $this->userRepository->findByEmail($newUser->getEmail());
+        $deleted = $this->userService->delete($findUserByEmail->getId());
+
+        $this->assertIsBool($deleted);
+        $this->assertTrue($deleted);
+    }
+
+
 }
