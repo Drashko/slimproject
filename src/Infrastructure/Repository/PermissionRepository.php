@@ -11,30 +11,19 @@ use Doctrine\ORM\EntityRepository;
 class PermissionRepository extends  EntityRepository implements PermissionRepositoryInterface
 {
 
-    /**
-     * @throws NotUniqueException
-     */
-    public function createPermission(string $permissionName, ?string $description = null): PermissionEntity
+
+    public function findPermissionsAttachedToRole(RoleEntity $role): ?array
     {
-        $permission = new PermissionEntity();
-        $permission->setName($permissionName);
-
-        if (isset($description)) {
-            $permission->setDescription($description);
-        }
-
-        try {
-            $this->_em->persist($permission);
-            $this->_em->flush();
-        } catch (UniqueConstraintViolationException $e) {
-            throw new NotUniqueException( $e->getMessage());
-        }
-
-        return $permission;
+        // TODO: Implement findPermissionsAttachedToRole() method.
     }
 
-    public function attachPermission(RoleEntity $role, PermissionEntity $permission): PermissionEntity
+    public function findPermissionById(int $id): ?PermissionEntity
     {
-        // TODO: Implement attachPermission() method.
+        // TODO: Implement findPermissionById() method.
+    }
+
+    public function findPermissionsByName(string $name): array
+    {
+        // TODO: Implement findPermissionsByName() method.
     }
 }

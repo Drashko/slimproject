@@ -6,5 +6,9 @@ use App\Domain\Entity\RoleEntity;
 
 interface RoleRepositoryInterface
 {
-    public function createRole(string $roleName, ?string $description = null): RoleEntity;
+    public function findRoleById(int $id): RoleEntity;
+
+    public function findRoleByName(string $name): RoleEntity;
+
+    public function findChildrenRoles(int $roleId): array;
 }

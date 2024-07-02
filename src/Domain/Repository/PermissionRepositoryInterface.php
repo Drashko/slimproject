@@ -8,7 +8,9 @@ use App\Domain\Entity\RoleEntity;
 
 interface PermissionRepositoryInterface
 {
-    public function createPermission(string $permissionName, ?string $description = null) : PermissionEntity;
+    public function findPermissionsAttachedToRole(RoleEntity $role): ?array;
 
-    public function attachPermission(RoleEntity $role, PermissionEntity $permission) : PermissionEntity;
+    public function findPermissionById(int $id): ?PermissionEntity;
+
+    public function findPermissionsByName(string $name): array;
 }

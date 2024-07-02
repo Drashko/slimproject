@@ -10,22 +10,19 @@ use Doctrine\ORM\EntityRepository;
 class RoleRepository extends EntityRepository implements RoleRepositoryInterface
 {
 
-    public function createRole(string $roleName, ?string $description = null): RoleEntity
+
+    public function findRoleById(int $id): RoleEntity
     {
-        $role = new RoleEntity();
-        $role->setName($roleName);
+        // TODO: Implement findRoleById() method.
+    }
 
-        if (isset($description)) {
-            $role->setDescription($description);
-        }
+    public function findRoleByName(string $name): RoleEntity
+    {
+        // TODO: Implement findRoleByName() method.
+    }
 
-        try {
-            $this->_em->persist($role);
-            $this->_em->flush();
-        } catch (UniqueConstraintViolationException $e) {
-            throw NotUniqueException::notUniqueRole($roleName);
-        }
-
-        return $role;
+    public function findChildrenRoles(int $roleId): array
+    {
+        // TODO: Implement findChildrenRoles() method.
     }
 }
