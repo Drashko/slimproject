@@ -5,9 +5,17 @@ namespace App\Infrastructure\Service;
 use App\Application\Access\AuthorizationInterface;
 use App\Domain\Entity\PermissionEntity;
 use App\Domain\Entity\RoleEntity;
+use App\Domain\Repository\PermissionRepositoryInterface;
+use App\Domain\Repository\RoleRepositoryInterface;
 
 class Authorization implements AuthorizationInterface
 {
+
+    public function __construct(
+        private PermissionRepositoryInterface $permissionRepository,
+        private RoleRepositoryInterface       $roleRepository)
+    {
+    }
 
     public function createPermission(string $permissionMane, ?string $description = null): PermissionEntity
     {
