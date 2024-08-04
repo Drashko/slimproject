@@ -5,7 +5,7 @@ namespace App\Application\Access;
 
 use App\Domain\Entity\UserEntity;
 
-interface AuthenticationInterface
+interface AuthenticationServiceInterface
 {
    public function registration(string $email, string $password, string $phone) : bool;
 

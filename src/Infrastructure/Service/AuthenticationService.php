@@ -2,10 +2,10 @@
 
 namespace App\Infrastructure\Service;
 
-use App\Application\Access\AuthenticationInterface;
+use App\Application\Access\AuthenticationServiceInterface;
 use App\Domain\Entity\UserEntity;
 
-class Authentication implements AuthenticationInterface
+class AuthenticationService implements AuthenticationServiceInterface
 {
 
     public function registration(string $email, string $password, string $phone): bool

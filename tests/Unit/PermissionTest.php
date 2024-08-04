@@ -2,13 +2,14 @@
 
 namespace Unit;
 
+use App\Domain\Repository\PermissionRepositoryInterface;
 use App\Domain\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
 use Tests\BaseTestCase;
 
-class RbacTest extends BaseTestCase
+class PermissionTest extends BaseTestCase
 {
     /**
      * @throws ToolsException
@@ -19,7 +20,7 @@ class RbacTest extends BaseTestCase
         $container = self::getContainer();
 
         $this->entityManager = $container->get(EntityManagerInterface::class);
-        $this->userRepository = $container->get(UserRepositoryInterface::class);
+        $this->userRepository = $container->get(PermissionRepositoryInterface::class);
 
         $schemaTool = new SchemaTool($this->entityManager);
         $classes = $this->entityManager->getMetadataFactory()->getAllMetadata();
@@ -34,18 +35,10 @@ class RbacTest extends BaseTestCase
         $schemaTool->dropSchema($classes);
     }
 
-
-    public function testAddRole(){
-
+    public function testCreatePermission(){
         $this->assertTrue(true);
     }
 
 
-    public function testAddPermission(){
-        $this->assertTrue(true);
-    }
 
-    public function testAttachPermissionToRole(){
-        $this->assertTrue(true);
-    }
 }

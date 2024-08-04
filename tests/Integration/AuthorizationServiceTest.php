@@ -1,11 +1,13 @@
 <?php
 
-namespace Unit;
+namespace Integration;
 
+use App\Application\Dto\UserDto;
+use App\Application\User\UserCrudServiceInterface;
 use App\Domain\Entity\UserEntity;
+use App\Domain\Repository\RoleRepositoryInterface;
 use App\Domain\Repository\UserRepositoryInterface;
-use App\Infrastructure\Service\UserCrudService;
-use DateTime;
+use App\Infrastructure\Service\AuthorizationService;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,8 +16,10 @@ use Doctrine\ORM\Tools\ToolsException;
 use Exception;
 use Tests\BaseTestCase;
 
-class UserTest extends BaseTestCase
+class AuthorizationServiceTest extends BaseTestCase
 {
+
+
     /**
      * @throws DependencyException
      * @throws ToolsException
@@ -28,7 +32,8 @@ class UserTest extends BaseTestCase
         $container = self::getContainer();
 
         $this->entityManager = $container->get(EntityManagerInterface::class);
-        $this->userRepository = $container->get(UserRepositoryInterface::class);
+        $this->userRepository = $container->get(RoleRepositoryInterface::class);
+        $this->userService = $container->get(AuthorizationService::class);
 
         $schemaTool = new SchemaTool($this->entityManager);
         $classes = $this->entityManager->getMetadataFactory()->getAllMetadata();
@@ -43,23 +48,8 @@ class UserTest extends BaseTestCase
         $schemaTool->dropSchema($classes);
     }
 
-    //add, delete , update ...
-    public function testCreateUser(){
-
-//        $user = new UserEntity();
-//        $user->setName('John Doe');
-//        $user->setPassword('122565yup');
-//        $user->setEmail('john@example.com');
-//        $user->setCreatedAt(new DateTime('now'));
-//
-//        $this->entityManager->persist($user);
-//        $this->entityManager->flush();
-//
-//        $userFromDb = $this->userRepository->findById($user->getId());
-//
-//        $this->assertInstanceOf(UserEntity::class, $userFromDb);
-//        $this->assertEquals('John Doe', $userFromDb->getName());
-//        $this->assertEquals('john@example.com', $userFromDb->getEmail());
+    public function testHasAccess(){
         $this->assertTrue(true);
     }
+
 }

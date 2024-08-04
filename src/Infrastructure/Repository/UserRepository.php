@@ -7,31 +7,32 @@ use App\Domain\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
-
 
 class UserRepository extends EntityRepository implements UserRepositoryInterface
 {
 
-//    public function __construct(EntityManagerInterface $em, ClassMetadata $class)
-//    {
-//        parent::__construct($em, $class);
-//    }
+    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly ClassMetadata $class)
+    {
+        parent::__construct($this->entityManager, $this->class);
+    }
 
     public function findById($id): ?UserEntity
     {
-        return $this->_em->find(UserEntity::class, $id);
+        return $this->entityManager->getRepository(UserEntity::class)->find($id);
     }
 
-    /**
-     * @throws NonUniqueResultException
-     * @throws NoResultException
-     */
-    public function findByEmail(string $email): ?UserEntity
+
+    public function findOneByEmail(string $email): ?UserEntity
     {
+        return $this->entityManager->getRepository(UserEntity::class)->findOneBy(['email' => $email]);
+    }
+
+    public function filtered(array $conditions): array
+    {
+
+        //todo implement
         //works
-        $queryBuilder = $this->_em->createQueryBuilder()
+        $queryBuilder = $this->entityManager->getRepository(UserEntity::class)->createQueryBuilder('u')
             ->select('u')
             ->from(UserEntity::class, 'u');
         return  $queryBuilder->getQuery()->getSingleResult();
@@ -40,15 +41,26 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
         //works
 //        $query = $this->_em->createQuery('SELECT u FROM App\Domain\Entity\UserEntity u WHERE u.email = :email')->setParameter('email', $email);
 //        return $query->getOneOrNullResult();
-
     }
 
-    //todo add filer params in where clause
-    public function list(?array $params): ?array
+    public function delete(UserEntity $userEntity): bool
     {
+        $this->entityManager->remove($userEntity);
 
-     //todo implements
-        return [];
+        return true;
+    }
 
+    public function create(UserEntity $userEntity): UserEntity
+    {
+        $this->entityManager->persist($userEntity);
+        $this->entityManager->flush();
+
+        return $userEntity;
+    }
+
+    public function update(UserEntity $userEntity): void
+    {
+        $this->entityManager->persist($userEntity);
+        $this->entityManager->flush();
     }
 }

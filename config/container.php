@@ -1,12 +1,21 @@
 <?php
 
+use App\Application\Access\RbacServiceInterface;
+use App\Application\Access\RoleCrudServiceInterface;
 use App\Application\ApplicationInterface;
-use App\Application\User\UserServiceInterface;
+use App\Application\User\UserCrudServiceInterface;
+use App\Domain\Factory\ContainerAwareRepositoryFactory;
+use App\Domain\Repository\PermissionRepositoryInterface;
+use App\Domain\Repository\RoleRepositoryInterface;
 use App\Domain\Repository\UserRepositoryInterface;
 use App\Infrastructure\ORM\EntityManagerAdapterAdapterService;
 use App\Infrastructure\ORM\EntityManagerAdapterServiceInterface;
+use App\Infrastructure\Repository\PermissionRepository;
+use App\Infrastructure\Repository\RoleRepository;
 use App\Infrastructure\Repository\UserRepository;
-use App\Infrastructure\Service\UserService;
+use App\Infrastructure\Service\RbacService;
+use App\Infrastructure\Service\RoleCrudService;
+use App\Infrastructure\Service\UserCrudService;
 use App\Infrastructure\Slim\Factory\LoggerFactory;
 use App\Infrastructure\Slim\Handler\NotFoundHandler;
 use App\Infrastructure\Support\Config;
@@ -105,17 +114,17 @@ return [
         return $errorMiddleware;
     },
     //add translation
-    TranslatorInterface::class => function (ContainerInterface $container)  {
-      $loader = new ArrayLoader();
-      $translator = new Translator('en');
-      $translator->addLoader('array', $loader);
-      $translator->addResource('array', $container->get('settings')['localization_path']['bg'], 'bg' );
-      $translator->addResource('array', $container->get('settings')['localization_path']['en'], 'en');
-      return $translator;
+    TranslatorInterface::class => function (ContainerInterface $container) {
+        $loader = new ArrayLoader();
+        $translator = new Translator('en');
+        $translator->addLoader('array', $loader);
+        $translator->addResource('array', $container->get('settings')['localization_path']['bg'], 'bg');
+        $translator->addResource('array', $container->get('settings')['localization_path']['en'], 'en');
+        return $translator;
     },
     //add validation
     ValidatorInterface::class => function () {
-       return Validation::createValidatorBuilder()->enableAttributeMapping()->getValidator();
+        return Validation::createValidatorBuilder()->enableAttributeMapping()->getValidator();
     },
     //add forms
     FormFactoryInterface::class => function (ContainerInterface $container): FormFactoryInterface {
@@ -250,6 +259,8 @@ return [
             $settings['doctrine']['dev_mode']
         );
 
+        //$config->setRepositoryFactory(new ContainerAwareRepositoryFactory($container));
+
         $connection = DriverManager::getConnection($settings['doctrine']['connection'], $config);
 
         return new EntityManager($connection, $config);
@@ -266,9 +277,7 @@ return [
     ResponseFactoryInterface::class => function (ContainerInterface $container) {
         return $container->get(Psr17Factory::class);
     },
-
-
-//not in use
+    //add abstraction for doctrine entityManager
 //    EntityManagerAdapterServiceInterface::class => function (ContainerInterface $container) {
 //        $entityManager = $container->get(EntityManagerInterface::class);
 //        return new EntityManagerAdapterAdapterService($entityManager);
@@ -288,18 +297,34 @@ return [
     ClassMetadata::class => function (ContainerInterface $container) {
         return new ClassMetadata($container->get(EntityManagerInterface::class));
     },
-
+    //user definitions
     UserRepositoryInterface::class => function (ContainerInterface $container) {
-        return new UserRepository(
-            $container->get(EntityManagerInterface::class),
-                $container->get(ClassMetadata::class)
+        return new UserRepository($container->get(EntityManagerInterface::class), $container->get(ClassMetadata::class));
+    },
+    UserCrudServiceInterface::class => function (ContainerInterface $container) {
+        return new UserCrudService(
+            $container->get(UserRepositoryInterface::class)
         );
     },
+    //role definitions
+    RoleRepositoryInterface::class => function (ContainerInterface $container) {
+        return new RoleRepository($container->get(EntityManagerInterface::class), $container->get(ClassMetadata::class));
+    },
 
-    UserServiceInterface::class => function (ContainerInterface $container) {
-        return new UserService(
-            $container->get(UserRepositoryInterface::class),
-            $container->get(EntityManagerInterface::class)
-        );
+    RoleCrudServiceInterface::class => function (ContainerInterface $container) {
+        return new RoleCrudService($container->get(RoleRepositoryInterface::class));
+    },
+
+    //permission definitions
+    PermissionRepositoryInterface::class => function (ContainerInterface $container) {
+        return new PermissionRepository($container->get(EntityManagerInterface::class), $container->get(ClassMetadata::class));
+    },
+
+    //add rbac definitions]
+    RbacServiceInterface::class => function (ContainerInterface $container) {
+        return new RbacService($container->get(RoleCrudServiceInterface::class), $container->get(RoleRepositoryInterface::class));
     }
+
+
+
 ];

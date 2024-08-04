@@ -29,8 +29,6 @@ final class UserDto
         return $this->email;
     }
 
-
-
     public function getPassword(): string{
         return $this->password;
     }
