@@ -3,7 +3,7 @@
 namespace App\Infrastructure\Slim\Controller\Admin;
 
 use App\Application\ApplicationInterface;
-use App\Application\User\UserServiceInterface;
+use App\Application\User\UserCrudServiceInterface;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -14,8 +14,8 @@ class UserController
     private LoggerInterface $logger;
 
     public function __construct(
-        private readonly ApplicationInterface $application,
-        private readonly UserServiceInterface $userService,
+        private readonly ApplicationInterface     $application,
+        private readonly UserCrudServiceInterface $userService,
 
     )
     {

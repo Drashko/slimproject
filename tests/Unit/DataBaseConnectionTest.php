@@ -2,7 +2,6 @@
 
 namespace Unit;
 
-use PHPUnit\Framework\TestCase;
 use Tests\BaseTestCase;
 
 class DataBaseConnectionTest extends BaseTestCase

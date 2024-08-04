@@ -1,17 +1,25 @@
 <?php
 
-namespace Unit;
+namespace Integration;
 
-use App\Domain\Repository\UserRepositoryInterface;
+use App\Application\Access\RbacServiceInterface;
+use App\Application\Access\RoleCrudServiceInterface;
+use App\Application\Dto\RoleDto;
+use App\Domain\Entity\RoleEntity;
+use DI\DependencyException;
+use DI\NotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
 use Tests\BaseTestCase;
 
-class RbacTest extends BaseTestCase
+class RbacServiceTest extends BaseTestCase
 {
     /**
+     * @throws DependencyException
      * @throws ToolsException
+     * @throws NotFoundException
+     * @throws Exception
      */
     public function setUp(): void
     {
@@ -19,7 +27,7 @@ class RbacTest extends BaseTestCase
         $container = self::getContainer();
 
         $this->entityManager = $container->get(EntityManagerInterface::class);
-        $this->userRepository = $container->get(UserRepositoryInterface::class);
+        $this->rbacService = $container->get(RbacServiceInterface::class);
 
         $schemaTool = new SchemaTool($this->entityManager);
         $classes = $this->entityManager->getMetadataFactory()->getAllMetadata();
@@ -34,18 +42,19 @@ class RbacTest extends BaseTestCase
         $schemaTool->dropSchema($classes);
     }
 
+    public function testAddRole()
+    {}
 
-    public function testAddRole(){
+    public function testAttachPermissionToRole()
+    {}
 
-        $this->assertTrue(true);
-    }
+    public function testAttachChildRole()
+    {}
 
+    public function testAttachRoleToUser()
+    {}
 
-    public function testAddPermission(){
-        $this->assertTrue(true);
-    }
+    public function testCheckForCyclicHierarchy()
+    {}
 
-    public function testAttachPermissionToRole(){
-        $this->assertTrue(true);
-    }
 }

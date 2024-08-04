@@ -8,8 +8,14 @@ interface UserRepositoryInterface
 {
     public function findById(int $id) : ?UserEntity;
 
-    public function findByEmail(string $email) : ?UserEntity;
+    public function findOneByEmail(string $email) : ?UserEntity;
 
-    public function list(array $params) : ?array;
+    public function filtered(array $conditions) : array;
+
+    public function create(UserEntity $userEntity) : ?UserEntity;
+
+    public function update(UserEntity $userEntity) : void;
+
+    public function delete(UserEntity $userEntity) : bool;
 
 }

@@ -4,6 +4,8 @@ namespace App\Domain\Entity;
 
 use App\Infrastructure\Repository\PermissionRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PermissionRepository::class)]
@@ -30,6 +32,15 @@ class PermissionEntity
 
     #[ORM\Column(name: "description", type: "string", nullable: true)]
     private ?string $description;
+
+    #[ORM\ManyToMany(targetEntity: RoleEntity::class, mappedBy: 'roles')]
+    private Collection $roles;
+
+
+    public function __construct()
+    {
+        $this->roles = new ArrayCollection();
+    }
 
     public function getId(): int
     {
@@ -89,6 +100,32 @@ class PermissionEntity
     public function setDescription(?string $description): void
     {
         $this->description = $description;
+    }
+
+
+    public function getRoles(): ArrayCollection|Collection
+    {
+        return $this->roles;
+    }
+
+    public function addRole(RoleEntity $roleEntity): self
+    {
+        if (!$this->roles->contains($roleEntity)) {
+            $this->roles[] = $roleEntity;
+            $roleEntity->addPermission($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRole(RoleEntity $roleEntity): self
+    {
+        if ($this->roles->removeElement($roleEntity)) {
+            $roleEntity->removePermission($this);
+        }
+
+        return $this;
+
     }
 
     #[ORM\PrePersist]
